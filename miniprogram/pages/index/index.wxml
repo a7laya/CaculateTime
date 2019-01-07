@@ -1,0 +1,40 @@
+<!--index.wxml-->
+<view class='screen'>
+  <text>{{text}}</text>
+</view>
+<view class='res'>
+  <text>{{result}}</text>
+</view>
+<view class='main'>
+  <view class='row'>
+    <view class='func-item' bindtap="func_all_clear" data-func='AC'>清除</view>
+    <view class='cal-item' bindtap="input_cal" data-cal='()'>(   )</view>
+    <view class='func-item' bindtap="func_back_space">退格</view>
+    <view class='cal-item' bindtap="input_cal" data-cal='÷'>÷</view>
+  </view>
+
+  <view class='row'>
+    <view class='num-item' bindtap="input_num" data-num='7'>7</view>
+    <view class='num-item' bindtap="input_num" data-num='8'>8</view>
+    <view class='num-item' bindtap="input_num" data-num='9'>9</view>
+    <view class='cal-item' bindtap="input_cal" data-cal='x'>x</view>
+  </view>
+  <view class='row'>
+    <view class='num-item' bindtap="input_num" data-num='4'>4</view>
+    <view class='num-item' bindtap="input_num" data-num='5'>5</view>
+    <view class='num-item' bindtap="input_num" data-num='6'>6</view>
+    <view class='cal-item' bindtap="input_cal" data-cal='-'>-</view>
+  </view>
+  <view class='row'>
+    <view class='num-item' bindtap="input_num" data-num='1'>1</view>
+    <view class='num-item' bindtap="input_num" data-num='2'>2</view>
+    <view class='num-item' bindtap="input_num" data-num='3'>3</view>
+    <view class='cal-item' bindtap="input_cal" data-cal='+'>+</view>
+  </view>
+  <view class='row'>
+    <view class='num-item' bindtap="input_dot">.</view>
+    <view class='num-item' bindtap="input_num" data-num='0'>0</view>
+    <view class='num-item' bindtap="input_2dot">:</view>
+    <view class='cal-item' bindtap="input_eval">=</view>
+  </view>
+</view>
