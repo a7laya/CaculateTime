@@ -8,54 +8,114 @@ page {
 }
 
 .screen {
-  background: green;
-  padding: 5px;
-  font-size: 44px;
+  background: rgb(7, 128, 165);
+  padding: 10rpx;
+  font-size: 88rpx;
   color: white;
   height: 400rpx;
   width: 100%;
-  word-break:break-all;
+  word-break: break-all;
+  box-sizing: border-box;
 }
+
+@keyframes changeToS {
+  from {font-size: 66rpx}
+  to {
+    font-size: 44rpx;
+  }
+}
+
+@keyframes changeToM {
+  to {
+    font-size: 66rpx;
+  }
+}
+
+@keyframes changeToL {
+  from {font-size: 66rpx}
+  to {
+    font-size: 88rpx;
+  }
+}
+
+.screen-fontsize-s {
+  animation-name: changeToS;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+.screen-fontsize-m {
+  animation-name: changeToM;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+.screen-fontsize-l {
+  animation-name: changeToL;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
 .res {
-  background: rgb(1, 75, 1);
-  padding: 10rpx 5rpx;
+  background: rgb(9, 85, 129);
+  padding: 20rpx 10rpx;
   font-size: 44px;
   color: white;
-  height: 100rpx;
+  height: 120rpx;
   width: 100%;
-  line-height: 100rpx;
-  word-break:break-all;
+  line-height: 80rpx;
+  word-break: break-all;
+  box-sizing: border-box;
 }
 
 .main {
   background: #ccc;
 }
+
 .row {
   width: 750rpx;
   display: flex;
 }
 
-.func-item,
-.num-item,
-.cal-item {
+.func-item, .num-item, .cal-item {
   display: flex;
-  color: #666;
-  background: #fff;
+  color: rgb(255, 255, 255);
+  background: rgb(7, 43, 54);
   width: 200rpx;
   height: 110rpx;
-  justify-content:center;
-  align-items:center;
-  border: 1px solid #ccc;
+  justify-content: center;
+  align-items: center;
+  font-size: 55rpx;
+  border: 1rpx solid rgb(255, 255, 255);
 }
 
-.func-item:active,
-.num-item:active,
-.cal-item:active{
+.func-item.clear {
+  color: #fff;
+  background: rgb(255, 102, 0);
+}
+
+.func-item.back {
+  color: #fff;
+  background: rgb(160, 75, 18);
+}
+
+.cal-item {
+  color: #fff;
+  font-size: 80rpx;
+  background: rgb(255, 153, 0);
+}
+
+.num-item.dot {
+  font-size: 66rpx;
+}
+
+.func-item:active, .num-item:active, .cal-item:active {
   color: rgb(255, 255, 255);
-  background: rgb(71, 167, 103);
+  background: rgb(21, 75, 119);
 }
-
-
 
 /* .userinfo, .uploader, .tunnel {
   margin-top: 40rpx;
