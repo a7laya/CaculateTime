@@ -15,5 +15,31 @@
     "navigationBarTitleText": "时分计算器",
     "navigationBarTextStyle": "white"
   },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/more/index",
+        "iconPath": "images/share.png",
+        "selectedIconPath": "images/share.png",
+        "text": "更多功能"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/home_gray.png",
+        "selectedIconPath": "images/home_blue.png",
+        "text": "主页"
+      },
+      {
+        "pagePath": "pages/history/index",
+        "iconPath": "images/history_gray.png",
+        "selectedIconPath": "images/history_blue.png",
+        "text": "历史"
+      }
+    ]
+  },
   "cloud": true
 }
