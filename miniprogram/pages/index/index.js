@@ -31,7 +31,7 @@ const params = {
       this.setData({
         screenClass: 'screen-fontsize-l',
       });
-    }
+    } 
       // 对str进行预处理 start=========================================
       // case 1.如果str不是以数字或")"结尾，则砍掉最后一个字符
       if (/[^01234567890)]$/g.test(str))
