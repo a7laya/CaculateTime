@@ -1,0 +1,4 @@
+<!--pages/history/history.wxml-->
+<view class='container'>
+  历史记录  
+</view>

@@ -1,0 +1,32 @@
+<!--pages/more/feedback.wxml-->
+<view class="container">
+
+  <view class='page-head'>
+    <view class='page-head-title'>问题反馈</view>
+  </view>
+  <view class='page-body'>
+    <view class="page-section">
+      <!-- <view class="label">意见或建议：</view> -->
+      <view class="section feedback">
+        <form bindsubmit="bindFormSubmit">
+          <textarea placeholder="感谢您的意见或建议~" name="textarea" />
+          <button  type="default"  form-type="submit">提交</button>
+        </form>
+      </view>
+    </view>
+  </view>
+  <view class='page-foot'>
+    <view style='font-size: 14px'>关于我们</view>
+
+    <view>
+      微信号：a7laya
+    </view>
+    <view style='color:#ccc; margin-top:5px'> —— 做全网最好的计算器 ——
+    </view>
+  </view>
+  <view class='history-back'>
+    <view class='icon' bindtap='historyBack'>
+      <image src='../../images/history_back_white.png'></image>
+    </view>
+  </view>
+</view>

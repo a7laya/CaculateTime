@@ -1,8 +1,9 @@
 {
   "pages": [
+    "pages/more/more",
+    "pages/more/feedback",
     "pages/index/index",
-    "pages/history/index",
-    "pages/more/index",
+    "pages/history/history",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
     "pages/databaseGuide/databaseGuide",
@@ -24,7 +25,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/more/index",
+        "pagePath": "pages/more/more",
         "iconPath": "images/more_gray.png",
         "selectedIconPath": "images/more_blue.png",
         "text": "更多功能"
@@ -36,7 +37,7 @@
         "text": "主页"
       },
       {
-        "pagePath": "pages/history/index",
+        "pagePath": "pages/history/history",
         "iconPath": "images/history_gray.png",
         "selectedIconPath": "images/history_blue.png",
         "text": "历史"
