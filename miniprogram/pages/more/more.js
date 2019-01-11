@@ -1,65 +1,58 @@
 // pages/more/more.js
 const more = {
 
-    /**
-     * 页面的初始数据
-     */
-    data: {
-      feedbackURL: './feedback'
-    },
+  /**
+   * 页面的初始数据
+   */
+  data: {
+    feedbackURL: './feedback'
+  },
 
-    /**
-     * 跳转--问题反馈
-     */
-    gotoFeedback: function(e) {
+  /**
+   * 跳转--问题反馈
+   */
+  // gotoFeedback: function(e) {
+  //   wx.navigateTo({
+  //     url: this.data.feedbackURL
+  //   })
+  // },
+
+
+  // getUserInfo(info) {
+  //   const userInfo = info.detail.userInfo
+  //   this.setData({
+  //     userInfo,
+  //     hasUserInfo: true
+  //   })
+  //   console.log('1234:', this.data)
+  // },
+  bindGetUserInfo: function(e) {
+    console.log(e.detail.userInfo)
+    if (e.detail.userInfo) {
+      //用户按了允许授权按钮
+      let user = e.detail.userInfo
+      console.log('用户按了允许授权按钮', user)
       wx.navigateTo({
-        url: this.data.feedbackURL
+        url: this.data.feedbackURL + '?nickName=' + user.nickName + '&avataUrl=' + user.avataUrl
       })
-    },
+    } else {
+      //用户按了拒绝按钮
+    }
 
 
-    getUserInfo(info) {
-      const userInfo = info.detail.userInfo
-      this.setData({
-        userInfo,
-        hasUserInfo: true
-      })
-    },
-    clear() {
-      this.setData({
-        hasUserInfo: false,
-        userInfo: {}
-      })
-    },
+  },
+  clear() {
+    this.setData({
+      hasUserInfo: false,
+      userInfo: {}
+    })
+  },
 
 
-    /**
-     * 生命周期函数--监听页面加载
-     */
-    onLoad: function(options) {
-      // 查看是否授权
-      wx.getSetting({
-        success: function(res) {
-          if (res.authSetting['scope.userInfo']) {
-            wx.getUserInfo({
-              success: function(res) {
-                console.log(res.userInfo)
-                //用户已经授权过
-              }
-            })
-          }
-        }
-      })
-    },
-    bindGetUserInfo: function(e) {
-      console.log(e.detail.userInfo)
-      if (e.detail.userInfo) {
-        //用户按了允许授权按钮
-      } else {
-        //用户按了拒绝按钮
-      }
-    
-
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function(options) {
   },
 
   /**

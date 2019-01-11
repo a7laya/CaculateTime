@@ -1,17 +1,68 @@
 // pages/more/feedback.js
-
 const util = require('../../utils/util.js');
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-    userInfo: {},
-    logged: false,
-    takeSession: false,
+    showInput: true,
   },
+  feedbackInput: function (e) {
+    this.setData({
+      feedback: e.detail.value
+    })
+  },
+  formatTime: function () {
+    let d = new Date();
+    let year = d.getFullYear();
+    let month = change(d.getMonth() + 1);
+    let day = change(d.getDate());
+    let hour = change(d.getHours());
+    let minute = change(d.getMinutes());
+    let second = change(d.getSeconds());
+    function change(t) {
+      if (t < 10) {
+        return "0" + t;
+      } else {
+        return t;
+      }
+    }
+    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+  },
+  insertDatabase_feedback: function () {
+    const db = wx.cloud.database()
+    let that = this
+    let ts = this.formatTime()
+    console.log('ts', ts)
 
+    db.collection('feedback').add({
+      data: {
+        nickName: that.data.userInfo.nickName,
+        avatarUrl: that.data.userInfo.avatarUrl,
+        feedback: that.data.feedback,
+        ts
+      },
+      success: res => {
+        // 在返回结果中会包含新创建的记录的 _id
+        wx.showToast({
+          title: '问题反馈成功',
+        })
+        console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+        that.setData({
+          showInput:false
+        })
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '反馈失败'
+        })
+        console.error('[数据库] [新增记录] 失败：', err)
+      }
+    })
+    
+
+  },
   /**
    * 返回上一页面
    */
@@ -23,7 +74,25 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    let that = this
+    // 查看是否授权
+    wx.getSetting({
+      success: function (res) {
+        if (res.authSetting['scope.userInfo']) {
+          wx.getUserInfo({
+            success: function (res) {
+              console.log('用户已经授权过:', res.userInfo)
+              //用户已经授权过
+              that.setData({
+                userInfo: res.userInfo,
+                hasUserInfo: true
+              })
+              console.log(that.data)
+            }
+          })
+        }
+      }
+    })
   },
 
   /**

@@ -19,7 +19,7 @@
   box-sizing: border-box;
   width: 100%;
   background-color: #F1F1F1;
-  border-radius: 20rpx;
+  border-radius: 10rpx;
   padding: 20rpx;
   margin-bottom: 20rpx;
   color: rgb(13, 104, 146);
@@ -27,7 +27,7 @@
 }
 
 .page-head{
-  padding: 60rpx 50rpx 80rpx;
+  padding: 30rpx;
   text-align: center;
 }
 .page-head-title{
@@ -112,9 +112,12 @@
 
 .page-section{
   display: flex;
+  flex-direction: column;
   justify-content:center;
   width: 100%;
   margin-bottom: 60rpx;
+  min-height: 300rpx;
+  align-items:center;/*垂直居中*/
 }
 
 
