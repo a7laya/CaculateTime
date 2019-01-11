@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class='container'>
+<view class='container'> 
   <view class='screen'>
     <view class='{{screenClass}}'>{{text}}</view>
   </view>

@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/history/index",
+    "pages/more/index",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
     "pages/databaseGuide/databaseGuide",
@@ -23,8 +25,8 @@
     "list": [
       {
         "pagePath": "pages/more/index",
-        "iconPath": "images/share.png",
-        "selectedIconPath": "images/share.png",
+        "iconPath": "images/more_gray.png",
+        "selectedIconPath": "images/more_blue.png",
         "text": "更多功能"
       },
       {
