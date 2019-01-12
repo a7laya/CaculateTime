@@ -3,7 +3,7 @@
   <view class='screen'>
     <view class='{{screenClass}}'>{{text}}</view>
   </view>
-  <view class='res' bindtap="archive_res">
+  <view class='res' bindtap="save_res_normal">
     <text>{{result}}</text>
   </view>
   <view class='main'>

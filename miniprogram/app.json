@@ -1,15 +1,9 @@
 {
   "pages": [
-    "pages/more/more",
-    "pages/more/feedback",
-    "pages/index/index",
     "pages/history/history",
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib"
+    "pages/index/index",
+    "pages/more/more",
+    "pages/more/feedback"
   ],
   "window": {
     "backgroundColor": "rgb(5, 55, 83)",

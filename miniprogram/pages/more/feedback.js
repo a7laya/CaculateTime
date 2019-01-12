@@ -1,5 +1,7 @@
 // pages/more/feedback.js
 const util = require('../../utils/util.js');
+const app = getApp()
+const currentTime = app.currentTime // 获取当前时间的函数 精确到秒
 Page({
   /**
    * 页面的初始数据
@@ -12,27 +14,10 @@ Page({
       feedback: e.detail.value
     })
   },
-  formatTime: function () {
-    let d = new Date();
-    let year = d.getFullYear();
-    let month = change(d.getMonth() + 1);
-    let day = change(d.getDate());
-    let hour = change(d.getHours());
-    let minute = change(d.getMinutes());
-    let second = change(d.getSeconds());
-    function change(t) {
-      if (t < 10) {
-        return "0" + t;
-      } else {
-        return t;
-      }
-    }
-    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-  },
   insertDatabase_feedback: function () {
     const db = wx.cloud.database()
     let that = this
-    let ts = this.formatTime()
+    let ts = currentTime()
     console.log('ts', ts)
 
     db.collection('feedback').add({

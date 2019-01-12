@@ -1,4 +1,12 @@
 <!--pages/history/history.wxml-->
 <view class='container'>
-  历史记录  
+  <view class='history-list'>
+    <view class='history-item' wx:for='{{res_history_normal}}'>
+      <view class='order-num'>{{index}}</view>
+      <view class='str'>{{item.str}}</view>
+      <view class='res'>={{item.res}}</view>
+      <view class='ts'>{{item.ts}}</view>
+    </view>
+  </view>
+  <button bindtap='clear_history' data-model='normal'>清空这些记录</button>
 </view>
