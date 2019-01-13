@@ -1,15 +1,25 @@
 /* pages/history/history.wxss */
 .container {
-  background-color: #ccc;
+  background-color: rgb(255, 255, 255);
 }
 .history-list{
   height: 1200rpx;
   width:100%;
   overflow: scroll;
 }
+.history-list .no-data{
+  height: 800rpx;
+  padding: 40rpx;
+  font-size: 24rpx;
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .history-item {
   width: 100%;
-  min-height: 120rpx;
+  min-height: 140rpx;
   background-color: rgb(255, 255, 255);
   display: flex;
   flex-direction: row;
@@ -18,15 +28,56 @@
   padding-top: 20rpx;
   position: relative;
 }
+.history-item .main{
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 10rpx;
+}
+.history-item .main .res{
+  font-size: 50rpx;
+  color: rgb(10, 168, 207);
+}
+.history-item .main .str{
+  font-size: 28rpx;
+  background-color: #eee;
+  padding: 10rpx;
+  width: 93%;
+  word-break: break-all;
+}
+.history-item .main .info{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 28rpx;
+  color: #aaa;
+  padding: 10rpx;
+  width: 93%;
+}
+.history-item .main .info .dots{
+  background-color: #eee;
+  width: 66rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  font-size: 30rpx;
+  font-weight: 900;
+  letter-spacing: 5rpx;
+  text-align: center;
+  color: #333;
+  border-radius: 10rpx;
+}
 
 .history-item .order-num {
   display: flex;
   justify-content: center;
-  margin: 0 10rpx;
-  width: 60rpx;
-  height: 50rpx;
-  border-radius: 5rpx;
+  margin: 10rpx 10rpx;
+  width: 80rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 12px;
   color: #fff;
+  border-radius: 5rpx;
   background-color: rgb(6, 99, 122);
 }
 .history-item .ts {

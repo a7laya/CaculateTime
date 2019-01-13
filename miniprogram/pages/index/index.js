@@ -6,7 +6,7 @@ const params = {
     msg: 'hello！！', // 测试用的，可以忽略
     text: '', // 主屏幕字符串
     result: '', // 结果屏字符串
-    res_history_normal: [], // 计算算式及结果历史记录(本地存储)
+    res_history: [], // 计算算式及结果历史记录(本地存储)
     screenClass: '', // 屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
   },
 
@@ -24,44 +24,39 @@ const params = {
   /**
    * 生命周期函数--监听页面加载
    * Step 0.判断页面跳转来源
-   * Step 1.加载该模式下的历史信息
+   * Step 1.接收引用过来的的res_history(通过app.globalData中转) 默认:str+res_history
    */
   onLoad: function (options) {
+    console.log('触发index的onLoad, options', options)
     let that = this
-    //Step 0.
-    // let pages = getCurrentPages();
-    // let prevpage = pages[pages.length - 2];
-    // if(prevpage) console.log('页面来源:',prevpage.route)
+    let str = that.data.text
+    // Step 0.
 
-    //Step 1.
-    wx.getStorage({
-      key: 'cal_res_normal',
-      success: function (res) {
-        console.log("提取到cal_res_normal:", res)
-        that.setData({
-          res_history_normal: res.data
-        })
-      }
+    // Step 1.
+    let res_history = app.globalData.res_history || ''
+    console.log('res_history: ' + res_history+'  str: '+str)
+    that.setData({
+      text: str + res_history, // 主屏幕字符串
     })
+    if (str + res_history != '') that.cal_promptly(str + res_history)
+
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    console.log('触发onShow')
     let that = this
+    let str = that.data.text
     //Step 0.
-    let pages = getCurrentPages();
-    let prevpage = pages[pages.length - 2];
-    if(prevpage) console.log('页面来源:',prevpage.route)
-
-    //Step 1. 更新tabBar里面留存的数据
+    //Step 1. 获取历史记录集合,更新tabBar里面留存的数据
     wx.getStorage({
-      key: 'cal_res_normal',
+      key: 'res_history',
       success: function (res) {
-        console.log("提取到cal_res_normal:", res)
         that.setData({
-          res_history_normal: res.data
+          res_history: res.data
         })
       }
     })
@@ -69,18 +64,33 @@ const params = {
 
   /**
    * 保存数据--正常模式下的计算结果
+   * 1. 读取本地存储的历史数据,并绑定到data.res_history
+   * 
    */
   save_res_normal() {
+    let that = this
+    if (this.data.result == '') return // 结果不为空,才保存到历史
+    // Step 1.
+    // wx.getStorage({
+    //   key: 'res_history',
+    //   success: function (res) {
+    //     // console.log("提取到res_history:", res)
+    //     that.setData({
+    //       res_history: res.data,
+    //     })
+    //   }
+    // })
     console.log('开始保存。。。')
     let str = this.data.text
     let res = this.data.result.replace(/^./, '') // 将结果去掉等号再保存
-    let ts = currentTime() // 调用函数生成当前时间
-    let res_history_normal = this.data.res_history_normal
-    res_history_normal.push({str, res, ts})
-    console.log('res_history_normal:', res_history_normal)
+    let time = currentTime() // 调用函数生成当前时间
+    let ts = Date.parse(new Date()); // 生成毫秒数的时间戳
+    let res_history = this.data.res_history
+    res_history.push({ str, res, time, ts })
+    console.log('res_history:', res_history)
     wx.setStorage({
-      key: 'cal_res_normal',
-      data: res_history_normal,
+      key: 'res_history',
+      data: res_history,
       success: function (res) {
         wx.showToast({
           title: '结果保存成功',
@@ -89,74 +99,6 @@ const params = {
     })
 
   },
-
-
-  /* ***************************************************************************
-   * function: 立即运算
-   * author: lzb
-   * date: 2019-1-7
-   * description: 计算算式str并更新到屏幕结果;
-   * ****************************************************************************/
-  cal_promptly(str) {
-    // console.log(str,' len:',str.length)
-    // 根据str长度调整屏幕显示的字体大小
-    if (str.length > 60) {
-      this.setData({
-        screenClass: 'screen-fontsize-s',
-      });
-    }
-    if (str.length > 30 && str.length < 60) {
-      this.setData({
-        screenClass: 'screen-fontsize-m',
-      });
-    }
-    if (str.length < 30) {
-      this.setData({
-        screenClass: 'screen-fontsize-l',
-      });
-    }
-    // 对str进行预处理 start=========================================
-    // case 1.如果str不是以数字或")"结尾，则砍掉最后一个字符
-    if (/[^01234567890)]$/g.test(str))
-      str = this.data.text.substring(0, this.data.text.length - 1);
-    // case 2.如果在运算中出现单个整数与带":"数之间的运算 则进行相应转换，例如 3+3:50+4-7 => 3:00+3:50+4:00-7:00
-    if (/:/g.test(str))
-      // str = str.replace(/((?:\+|\-)\d+)(?!:)/g, '$1:00').replace(/^(\d+)(\+|\-)/g, '$1:00$2');
-      str = str.replace(/((?:\+|\-)\d+)(?![.|:|\d:])/g, '$1:00').replace(/^(\d+)(\+|\-)/g, '$1:00$2');
-    // case 3.如果str出现一位小数(eg:1+3.2+5.3)则解析为1+3.20+5.30
-    if (/[\.\:](\d)(?!\d)/g.test(str))
-      str = str.replace(/([\.\:]\d)(?!\d)/g, '$10');
-
-    // case 4. 将 3(1+2) 解析成 3×(1+2)
-    if (/\d(\()/g.test(str)) {
-      str = str.replace(/(\d)(?:\()/g, '$1×(');
-      this.setData({
-        text: str,
-      });
-    };
-    console.log(str, ' len:', str.length)
-
-
-    // 对str进行预处理 end==========================================
-
-    // 将处理好的str传入核心计算逻辑得到数组res res[0] 是表示=或≈，res[1]表示结果
-    let res = CaculateTime.caculate_time(str);
-    // 对结果进行判断
-    if (res[1] != 'false') {
-      this.setData({
-        result: res[0] + res[1],
-      })
-    } else { // 如果计算结果返回 ‘false’
-      str.length == 0 ?
-        this.setData({
-          result: '',
-        }) :
-        this.setData({
-          result: '有点问题',
-        })
-    }
-  },
-
   /*---------------------------------------------------------
   *--输出数字到主屏幕(这里需要考虑到一下几种情况)---------------
   * case 1. 判断不生效情况 直接return（str以.12或:12结尾 不生效 只保留两位小数） 
@@ -299,10 +241,76 @@ const params = {
     // 即时运算
     this.cal_promptly(str);
   },
+  /* ***************************************************************************
+   * function: 立即运算
+   * author: lzb
+   * date: 2019-1-7
+   * description: 计算算式str并更新到屏幕结果;
+   * ****************************************************************************/
+  cal_promptly(str) {
+    // console.log(str,' len:',str.length)
+    // 根据str长度调整屏幕显示的字体大小
+    if (str.length > 60) {
+      this.setData({
+        screenClass: 'screen-fontsize-s',
+      });
+    }
+    if (str.length > 30 && str.length < 60) {
+      this.setData({
+        screenClass: 'screen-fontsize-m',
+      });
+    }
+    if (str.length < 30) {
+      this.setData({
+        screenClass: 'screen-fontsize-l',
+      });
+    }
+    // 对str进行预处理 start=========================================
+    // case 1.如果str不是以数字或")"结尾，则砍掉最后一个字符
+    if (/[^01234567890)]$/g.test(str))
+      str = this.data.text.substring(0, this.data.text.length - 1);
+    // case 2.如果在运算中出现单个整数与带":"数之间的运算 则进行相应转换，例如 3+3:50+4-7 => 3:00+3:50+4:00-7:00
+    if (/:/g.test(str))
+      // str = str.replace(/((?:\+|\-)\d+)(?!:)/g, '$1:00').replace(/^(\d+)(\+|\-)/g, '$1:00$2');
+      str = str.replace(/((?:\+|\-)\d+)(?![.|:|\d:])/g, '$1:00').replace(/^(\d+)(\+|\-)/g, '$1:00$2');
+    // case 3.如果str出现一位小数(eg:1+3.2+5.3)则解析为1+3.20+5.30
+    if (/[\.\:](\d)(?!\d)/g.test(str))
+      str = str.replace(/([\.\:]\d)(?!\d)/g, '$10');
+
+    // case 4. 将 3(1+2) 解析成 3×(1+2)
+    if (/\d(\()/g.test(str)) {
+      str = str.replace(/(\d)(?:\()/g, '$1×(');
+      this.setData({
+        text: str,
+      });
+    };
+    console.log(str, ' len:', str.length)
+
+
+    // 对str进行预处理 end==========================================
+
+    // 将处理好的str传入核心计算逻辑得到数组res res[0] 是表示=或≈，res[1]表示结果
+    let res = CaculateTime.caculate_time(str);
+    // 对结果进行判断
+    if (res[1] != 'false') {
+      this.setData({
+        result: res[0] + res[1],
+      })
+    } else { // 如果计算结果返回 ‘false’
+      str.length == 0 ?
+        this.setData({
+          result: '',
+        }) :
+        this.setData({
+          result: '有点问题',
+        })
+    }
+  }
 
 
 }
 Page(params)
+
 
 
 

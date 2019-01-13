@@ -1,7 +1,7 @@
 //app.js
 App({
   onLaunch: function () {
-    
+
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
     } else {
@@ -12,7 +12,7 @@ App({
 
     this.globalData = {}
 
- 
+
     // 启用版本发现及通知更新--------------------------------
     const updateManager = wx.getUpdateManager()
 
@@ -56,4 +56,14 @@ App({
     }
     return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
   },
+  // 将毫秒数转换为XX前(2分钟前|3小时前|昨天|2天前)
+  timePass: function (ms) {
+    if (ms / 60000 >= 2880) return parseInt(ms/60000/1440) + '天前'
+    if (ms / 60000 >= 1440 && ms / 60000 < 2880) return '昨天'
+    if (ms / 60000 >= 60   && ms / 60000 < 1440) return parseInt(ms/60000/60)+'小时前'
+    if (ms / 60000 < 60) return parseInt(ms/60000)+'分钟前'
+  },
+  globalData:{
+    res_history:''
+  }
 })

@@ -1,12 +1,24 @@
 <!--pages/history/history.wxml-->
+<!-- 在..处增加功能:全屏结果  添加备注 -->
 <view class='container'>
   <view class='history-list'>
-    <view class='history-item' wx:for='{{res_history_normal}}'>
-      <view class='order-num'>{{index}}</view>
-      <view class='str'>{{item.str}}</view>
-      <view class='res'>={{item.res}}</view>
-      <view class='ts'>{{item.ts}}</view>
+    <view wx:if='{{!has_data}}' class='no-data'>
+    <text>暂时没有历史记录,</text>
+    <text>可以点击计算器"计算结果"一栏进行保存数据操作!</text>
+    
+    </view>
+    <view class='history-item' wx:for='{{res_history}}'>
+      <view class='order-num' bindtap='useIt' data-res_history='{{item.res}}'>引用</view>
+      <view class='main'>
+        <view class='res'>={{item.res}}</view>
+        <view class='str'>{{item.str}}={{item.res}}</view>
+        <view class='info'>
+          <view class='time'>{{item.time_pass}}</view>
+          <view class='dots'>··</view>
+        </view>
+      </view>
+      <!-- <view class='ts'>{{item.ts}}</view> -->
     </view>
   </view>
-  <button bindtap='clear_history' data-model='normal'>清空这些记录</button>
+  <button wx:if='{{has_data}}' bindtap='clear_history' data-model='normal' style='width:100%'>清空这些记录</button>
 </view>
