@@ -61,7 +61,8 @@ App({
     if (ms / 60000 >= 2880) return parseInt(ms/60000/1440) + '天前'
     if (ms / 60000 >= 1440 && ms / 60000 < 2880) return '昨天'
     if (ms / 60000 >= 60   && ms / 60000 < 1440) return parseInt(ms/60000/60)+'小时前'
-    if (ms / 60000 < 60) return parseInt(ms/60000)+'分钟前'
+    if (ms /  1000 >= 60   && ms / 60000 < 60) return parseInt(ms/60000)+'分钟前'
+    if (ms / 1000 < 60) return '刚刚'
   },
   globalData:{
     res_history:''

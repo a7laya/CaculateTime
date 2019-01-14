@@ -1,61 +1,92 @@
 /* pages/history/history.wxss */
+view{
+  box-sizing: border-box;
+  display: flex;
+}
 .container {
   background-color: rgb(255, 255, 255);
 }
-.history-list{
+
+.history-list {
   height: 1200rpx;
-  width:100%;
+  width: 100%;
   overflow: scroll;
 }
-.history-list .no-data{
+
+.history-list .no-data {
   height: 800rpx;
   padding: 40rpx;
-  font-size: 24rpx;
+  font-size: 36rpx;
   color: #aaa;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 .history-item {
   width: 100%;
-  min-height: 140rpx;
+  /* position: relative; */
+}
+
+.item-content {
+  width: 750rpx;
   background-color: rgb(255, 255, 255);
-  display: flex;
   flex-direction: row;
-  /* margin: 20rpx 0; */
   border-bottom: 1px solid rgb(197, 197, 197);
-  padding-top: 20rpx;
-  position: relative;
+  z-index: 3;
+  transition: left 0.2s ease-in-out;
+  /* position: absolute; */
 }
-.history-item .main{
+
+.inner.del {
+  justify-content: center;
+  align-items: center;
+  background-color: #e64340;
+  width: 180rpx;
+  font-size: 36rpx;
+  height: 220rpx;
+  text-align: center;
+  z-index: 2;
+  margin-left: -180rpx;
+  color: #fff;
+  /* position: absolute; */
+
+}
+
+.history-item .main {
   box-sizing: border-box;
-  display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 600rpx;
   padding: 0 10rpx;
+  margin-top: 20rpx;
 }
-.history-item .main .res{
+
+.history-item .main .res {
   font-size: 50rpx;
   color: rgb(10, 168, 207);
 }
-.history-item .main .str{
+
+.history-item .main .str {
   font-size: 28rpx;
   background-color: #eee;
   padding: 10rpx;
-  width: 93%;
+  width: 600rpx;
   word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.history-item .main .info{
-  display: flex;
+
+.history-item .main .info {
   flex-direction: row;
   justify-content: space-between;
   font-size: 28rpx;
   color: #aaa;
   padding: 10rpx;
-  width: 93%;
+  width: 600rpx;
 }
-.history-item .main .info .dots{
+
+.history-item .main .info .dots {
   background-color: #eee;
   width: 66rpx;
   height: 40rpx;
@@ -63,23 +94,24 @@
   font-size: 30rpx;
   font-weight: 900;
   letter-spacing: 5rpx;
-  text-align: center;
+  justify-content: center;
   color: #333;
   border-radius: 10rpx;
 }
 
 .history-item .order-num {
-  display: flex;
   justify-content: center;
   margin: 10rpx 10rpx;
   width: 80rpx;
-  height: 60rpx;
-  line-height: 60rpx;
+  height: 140rpx;
+  line-height: 140rpx;
   font-size: 12px;
   color: #fff;
   border-radius: 5rpx;
   background-color: rgb(6, 99, 122);
+  margin-top: 20rpx;
 }
+
 .history-item .ts {
   position: absolute;
   text-align: center;
@@ -88,8 +120,12 @@
   font-size: 12px;
   padding: 2px 8px;
   /* width: 360rpx; */
-  border-radius:0 0 0 10rpx;
+  border-radius: 0 0 0 10rpx;
   background-color: rgb(19, 83, 112);
   color: rgb(92, 217, 255);
   opacity: 0.8;
+}
+
+button {
+  padding-bottom: 10rpx;
 }

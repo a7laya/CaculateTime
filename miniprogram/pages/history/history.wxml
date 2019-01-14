@@ -1,24 +1,29 @@
 <!--pages/history/history.wxml-->
 <!-- 在..处增加功能:全屏结果  添加备注 -->
 <view class='container'>
-  <view class='history-list'>
+  <button type="warn" wx:if='{{has_data}}' bindtap='clear_history' data-model='normal' style='width:100%'>清空这些记录</button>
+  <scroll-view scroll-y class='history-list'>
     <view wx:if='{{!has_data}}' class='no-data'>
-    <text>暂时没有历史记录,</text>
-    <text>可以点击计算器"计算结果"一栏进行保存数据操作!</text>
-    
+      <text>暂时没有历史记录,</text>
+      <text>请点击"计算结果"一栏保存数据!</text>
+
     </view>
-    <view class='history-item' wx:for='{{res_history}}'>
-      <view class='order-num' bindtap='useIt' data-res_history='{{item.res}}'>引用</view>
-      <view class='main'>
-        <view class='res'>={{item.res}}</view>
-        <view class='str'>{{item.str}}={{item.res}}</view>
-        <view class='info'>
-          <view class='time'>{{item.time_pass}}</view>
-          <view class='dots'>··</view>
+
+    <view class='history-item' id='item{{index}}' wx:key='' wx:for='{{res_history}}'>
+      <view class='item-content' bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}" style="{{item.txtStyle}}">
+        <view class='order-num' bindtap='useIt' data-res_history='{{item.res}}'>引用</view>
+        <view class='main'>
+          <view class='res'>={{item.res}}</view>
+          <view class='str'>{{item.str}}={{item.res}}</view>
+          <view class='info'>
+            <view class='time'>{{item.time_pass}}</view>
+            <view class='dots' bindtap='show_options'>··</view>
+          </view>
         </view>
       </view>
       <!-- <view class='ts'>{{item.ts}}</view> -->
+        <view data-index="{{index}}" bindtap = "delItem" class="inner del">删除</view>
     </view>
-  </view>
-  <button wx:if='{{has_data}}' bindtap='clear_history' data-model='normal' style='width:100%'>清空这些记录</button>
+  </scroll-view>
+
 </view>

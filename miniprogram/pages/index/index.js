@@ -1,14 +1,36 @@
 //index.js
 const app = getApp()
 const currentTime = app.currentTime
+const innerAudioContext = wx.createInnerAudioContext()
+
 const params = {
   data: {
     msg: 'hello！！', // 测试用的，可以忽略
     text: '', // 主屏幕字符串
     result: '', // 结果屏字符串
     res_history: [], // 计算算式及结果历史记录(本地存储)
-    screenClass: '', // 屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
+    screenClass: '', // str屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
+    resClass: '', // res屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
+    num_tip:''
   },
+  audioPlay:  function () {
+            innerAudioContext.src = 'xxx';
+            innerAudioContext.play();
+
+
+            innerAudioContext.onPlay(() => {
+                  console.log('声音播放中');
+            })
+
+            innerAudioContext.onStop(() => {
+                  console.log('声音播放停止');
+            })
+
+            innerAudioContext.onEnded(() => {
+                  console.log('声音播放结束');
+            })
+
+    },
 
   /**
    * 转发功能
@@ -34,11 +56,18 @@ const params = {
 
     // Step 1.
     let res_history = app.globalData.res_history || ''
-    console.log('res_history: ' + res_history+'  str: '+str)
-    that.setData({
-      text: str + res_history, // 主屏幕字符串
-    })
-    if (str + res_history != '') that.cal_promptly(str + res_history)
+    console.log('res_history: ' + res_history + '  str: ' + str)
+    if (/\d$/.test(str)) {
+      that.setData({
+        text: str + '+' + res_history, // 主屏幕字符串
+      })
+    } else {
+      that.setData({
+        text: str + res_history, // 主屏幕字符串
+      })
+    }
+    // 重新计算结果
+    that.cal_promptly(that.data.text)
 
 
   },
@@ -81,12 +110,13 @@ const params = {
     //   }
     // })
     console.log('开始保存。。。')
-    let str = this.data.text
+    let str = this.data.text // 算式
     let res = this.data.result.replace(/^./, '') // 将结果去掉等号再保存
+    let itemStyle = '' // 设置每条记录的显示样式(为了做左滑删除用的)
     let time = currentTime() // 调用函数生成当前时间
     let ts = Date.parse(new Date()); // 生成毫秒数的时间戳
     let res_history = this.data.res_history
-    res_history.push({ str, res, time, ts })
+    res_history.push({ str, res, itemStyle, time, ts })
     console.log('res_history:', res_history)
     wx.setStorage({
       key: 'res_history',
@@ -250,21 +280,7 @@ const params = {
   cal_promptly(str) {
     // console.log(str,' len:',str.length)
     // 根据str长度调整屏幕显示的字体大小
-    if (str.length > 60) {
-      this.setData({
-        screenClass: 'screen-fontsize-s',
-      });
-    }
-    if (str.length > 30 && str.length < 60) {
-      this.setData({
-        screenClass: 'screen-fontsize-m',
-      });
-    }
-    if (str.length < 30) {
-      this.setData({
-        screenClass: 'screen-fontsize-l',
-      });
-    }
+    this.strChangeFontSize(str)
     // 对str进行预处理 start=========================================
     // case 1.如果str不是以数字或")"结尾，则砍掉最后一个字符
     if (/[^01234567890)]$/g.test(str))
@@ -291,19 +307,71 @@ const params = {
 
     // 将处理好的str传入核心计算逻辑得到数组res res[0] 是表示=或≈，res[1]表示结果
     let res = CaculateTime.caculate_time(str);
-    // 对结果进行判断
-    if (res[1] != 'false') {
+    let result = res[0] + res[1]
+    this.resChangeFontSize(result);
+    // 对更新数据绑定
+    this.setData({ result })
+  },
+  /**
+   *根据str长度调整屏幕显示的字体大小
+   */
+  strChangeFontSize(str) {
+    // 根据str长度调整屏幕显示的字体大小
+    if (str.length >= 50) {
       this.setData({
-        result: res[0] + res[1],
-      })
-    } else { // 如果计算结果返回 ‘false’
-      str.length == 0 ?
-        this.setData({
-          result: '',
-        }) :
-        this.setData({
-          result: '有点问题',
-        })
+        screenClass: 'screen-fontsize-s',
+      });
+    }
+    if (str.length >= 20 && str.length < 50) {
+      this.setData({
+        screenClass: 'screen-fontsize-m',
+      });
+    }
+    if (str.length < 20) {
+      this.setData({
+        screenClass: 'screen-fontsize-l',
+      });
+    }
+  },
+
+
+  /**
+   * 根据res长度调整屏幕显示的字体大小
+   * 根据res位数出现结果提示
+   */
+  resChangeFontSize(res) {
+    let that = this
+    if (res.length >= 15) {
+      this.setData({
+        resClass: 'res-fontsize-s',
+      });
+    }
+    if (res.length >= 10 && res.length < 15) {
+      this.setData({
+        resClass: 'res-fontsize-m',
+      });
+    }
+    if (res.length < 10) {
+      this.setData({
+        resClass: 'res-fontsize-l',
+      });
+    }
+    // 去掉res前面的等号
+    let intRes = res.replace(/^./g, '') || '';
+    // 取整
+    if(/[.:]/g.test(intRes)){
+      console.log('res有小数点')
+      intRes = intRes.split(/[\.:]/)[0]}
+    // 根据位数加单位(万|亿)
+    let len = intRes.length
+    if (len <= 4) { that.setData({ num_tip:'' })}
+    if(len>4 && len<9){
+      let num_tip = intRes.substring(0, len-4) + '万' + intRes.substring(len-4, len)
+      that.setData({ num_tip })
+    }
+    if (len >= 9) {
+      let num_tip = intRes.substring(0, len - 8) + '亿' + intRes.substring(len - 8, len - 4) + '万' + intRes.substring(len - 4, len)
+      that.setData({ num_tip })
     }
   }
 
