@@ -132,11 +132,15 @@ page {
   height: 140rpx;
   justify-content: center;
   align-items: center;
-  font-size: 55rpx;
+  font-size: 66rpx;
   border-top: 1rpx solid #ccc;
   border-left: 1rpx solid #ccc;
   position: relative;
   /* border-radius: 20rpx; */
+}
+
+.func-item {
+  font-size: 44rpx;
 }
 
 .func-item.clear {
@@ -157,6 +161,7 @@ page {
 
 .num-item.dot {
   font-size: 66rpx;
+  font-weight: bold;
 }
 
 .func-item:active, .num-item:active, .cal-item:active {
@@ -166,38 +171,43 @@ page {
 
 .num-tip {
   position: absolute;
-  font-size: 24rpx;
+  font-size: 28rpx;
   height: 100%;
   bottom: -50rpx;
   left: 80rpx;
-  color: rgb(5, 202, 209);
+  color: rgb(6, 243, 252);
   display: flex;
   align-items: center;
 }
 .res-intro{
   position: absolute;
-  font-size: 24rpx;
+  font-size: 28rpx;
+  width: 180rpx;
   height: 100%;
   top: 0;
-  right: 10rpx;
-  color: rgb(73, 178, 182);
+  right: 0rpx;
+  color: rgb(165, 197, 199);
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+.res-intro image{
+  width: 60rpx;
+  height: 60rpx;
 }
 .right-intro{
   position: absolute;
-  font-size: 22rpx;
-  left: 5rpx;
-  height: 100%;
+  font-size: 28rpx;
+  right: 5rpx;
   top: 0;
-  color: rgb(255, 230, 0);
+  color: rgb(245, 241, 206);
 }
-.item-intro{
+.dots-intro{
   position: absolute;
-  font-size: 22rpx;
-  top: 0;
+  font-size: 24rpx;
+  bottom: 5rpx;
   left: 5rpx;
-  color: rgb(65, 186, 190);
+  color: rgb(163, 163, 163);
 }
 /* .userinfo, .uploader, .tunnel {
   margin-top: 40rpx;

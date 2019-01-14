@@ -5,7 +5,7 @@
   <scroll-view scroll-y class='history-list'>
     <view wx:if='{{!has_data}}' class='no-data'>
       <text>暂时没有历史记录,</text>
-      <text>请点击"计算结果"一栏保存数据!</text>
+      <text>请点击结果栏"☆"保存数据!</text>
 
     </view>
 

@@ -3,19 +3,19 @@
   <view class='screen'>
     <view class='{{screenClass}}'>{{text}}</view>
   </view>
-  <view class='res' bindtap="save_res_normal">
+  <view class='res'>
     <view class='{{resClass}}'>{{result}}</view>
     <view class='num-tip'>{{num_tip}}</view>
-    <view class='res-intro'>点该栏保存结果</view>
+    <view class='res-intro' bindtap="save_res_normal"><image src='../../images/star_gray.png'></image></view>
   </view>
   <view class='main'>
     <view class='row'>
-      <view class='func-item clear' bindtap="func_all_clear" data-func='AC'>清除</view>
+      <view class='func-item clear' bindtap="func_all_clear" data-func='AC'>清 除</view>
       <view class='cal-item' bindtap="input_left" data-cal='('>(</view>
       <view class='cal-item' bindtap="input_right" data-cal=')'>)
-      <view class='right-intro'>算式前后加括号</view>
+      <view class='right-intro'>(···)</view>
       </view>
-      <view class='func-item back' bindtap="func_back_space">退格</view>
+      <view class='func-item back' bindtap="func_back_space">退 格</view>
     </view>
 
     <view class='row'>
@@ -38,7 +38,7 @@
     </view>
     <view class='row'>
       <view class='num-item dot' bindtap="input_2dot">:
-      <view class='item-intro'>计算时间</view>
+      <view class='dots-intro'>时间符</view>
       </view>
       <view class='num-item' bindtap="input_num" data-num='0'>0</view>
       <view class='num-item dot' bindtap="input_dot">·</view>

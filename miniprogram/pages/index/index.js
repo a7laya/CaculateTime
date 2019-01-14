@@ -11,26 +11,14 @@ const params = {
     res_history: [], // 计算算式及结果历史记录(本地存储)
     screenClass: '', // str屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
     resClass: '', // res屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
-    num_tip:''
+    num_tip: '', // 辅助结果显示 123456789->1亿2345万6789
+    audioSwitch: true
   },
-  audioPlay:  function () {
-            innerAudioContext.src = 'xxx';
-            innerAudioContext.play();
-
-
-            innerAudioContext.onPlay(() => {
-                  console.log('声音播放中');
-            })
-
-            innerAudioContext.onStop(() => {
-                  console.log('声音播放停止');
-            })
-
-            innerAudioContext.onEnded(() => {
-                  console.log('声音播放结束');
-            })
-
-    },
+  audioPlay: function (type = 'hit') {
+    if (type == 'save') { innerAudioContext.src = 'audio/save.mp3' }
+    else { innerAudioContext.src = 'audio/hit2.mp3' }
+    innerAudioContext.play();
+  },
 
   /**
    * 转发功能
@@ -97,6 +85,8 @@ const params = {
    * 
    */
   save_res_normal() {
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay('save')
     let that = this
     if (this.data.result == '') return // 结果不为空,才保存到历史
     // Step 1.
@@ -136,6 +126,9 @@ const params = {
   * case 3. str最后一个字符是'0'，且‘0’前面没有数字或者小数点（.:），则输入的数字直接覆盖0；（0，-0， +0）
   -----------------------------------------------------------*/
   input_num(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     // console.log(event.currentTarget.dataset.num);
     // 获取绑定该方法dom的dataset数据num，也就是计算器上的按键
     let num = event.currentTarget.dataset.num;
@@ -159,6 +152,9 @@ const params = {
 
   // 输出运算符号+-×÷()
   input_cal(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     // 获取绑定该方法dom的dataset数据cal，也就是计算器上的按键
     let cal = event.currentTarget.dataset.cal;
     // 获取输入到主屏幕的字符串
@@ -188,6 +184,9 @@ const params = {
   * case 3. 屏幕str最后1位为"."，则“:”覆盖之
   -----------------------------------------------------------*/
   input_2dot(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     let str = this.data.text;
     // case 1.
     if (!/\d*:\d*$/g.test(str) && !/\)$/g.test(str)) {
@@ -202,6 +201,9 @@ const params = {
     }
   },
   input_dot(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     let str = this.data.text;
     // case 1.
     if (!/\d*\.\d*$/g.test(str) && !/\)$/g.test(str)) {
@@ -219,10 +221,14 @@ const params = {
 
   // 清除全部，并保存到历史记录 *************************************************
   func_all_clear(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     // 清除全部
     this.setData({
       text: '',
       result: '',
+      num_tip: ''
     });
 
     // 保存到历史记录
@@ -231,6 +237,9 @@ const params = {
 
   // 左括号( *****************************************************************
   input_left(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     let str = this.data.text;
     let cal = event.currentTarget.dataset.cal;
     this.setData({
@@ -241,6 +250,9 @@ const params = {
 
   // 右括号) *****************************************************************
   input_right(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     let str = this.data.text;
     let cal = event.currentTarget.dataset.cal;
     // 失效情况====================================
@@ -262,6 +274,9 @@ const params = {
 
   // 退格键********************************************************************
   func_back_space(event) {
+    // 播放按键声音
+    let audioSwitch = this.data.audioSwitch
+    audioSwitch && this.audioPlay()
     let str = this.data.text;
     if (/^\([^\(]*\)$/g.test(str)) str = str.substring(1, str.length);
     str = str.substring(0, str.length - 1);
@@ -359,14 +374,14 @@ const params = {
     // 去掉res前面的等号
     let intRes = res.replace(/^./g, '') || '';
     // 取整
-    if(/[.:]/g.test(intRes)){
-      console.log('res有小数点')
-      intRes = intRes.split(/[\.:]/)[0]}
+    if (/[.:]/g.test(intRes)) {
+      intRes = intRes.split(/[\.:]/)[0]
+    }
     // 根据位数加单位(万|亿)
     let len = intRes.length
-    if (len <= 4) { that.setData({ num_tip:'' })}
-    if(len>4 && len<9){
-      let num_tip = intRes.substring(0, len-4) + '万' + intRes.substring(len-4, len)
+    if (len <= 4) { that.setData({ num_tip: '' }) }
+    if (len > 4 && len < 9) {
+      let num_tip = intRes.substring(0, len - 4) + '万' + intRes.substring(len - 4, len)
       that.setData({ num_tip })
     }
     if (len >= 9) {
