@@ -1,6 +1,7 @@
 //index.js
 const app = getApp()
 const currentTime = app.currentTime
+const getConstellation = app.getConstellation
 const innerAudioContext = wx.createInnerAudioContext()
 
 const params = {
@@ -12,8 +13,35 @@ const params = {
     screenClass: '', // str屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
     resClass: '', // res屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
     num_tip: '', // 辅助结果显示 123456789->1亿2345万6789
-    audioSwitch: true
+    audioSwitch: true, // 音量开关
+    constellation: '',
+    constellation_analysis: '试试键入出自己的生日比如:19990101'
   },
+
+  /**
+   * 设置彩蛋 - 主屏幕
+   * */
+  eggs: function (id = 0) { // 初始化数据库
+    const db = wx.cloud.database()
+    db.collection('eggs').where({
+      // id: parseInt(Math.random()*8)
+      'id': id
+    }).get({
+      success: function (res) {
+          console.log('res', res)
+        if (res.data.length === 1) {
+          console.log('res', res)
+        }
+      },
+      fail: function (e) {
+        console.log(e)
+      }
+    })
+  },
+
+  /**
+   * 通过传参type设置各个按键声音
+   * */ 
   audioPlay: function (type = 'hit') {
     if (type == 'save') { innerAudioContext.src = 'audio/save.mp3' }
     else { innerAudioContext.src = 'audio/hit2.mp3' }
@@ -43,7 +71,8 @@ const params = {
     // Step 0.
 
     // Step 1.
-    let res_history = app.globalData.res_history || ''
+    if (!app.globalData.res_history) return
+    let res_history = app.globalData.res_history
     console.log('res_history: ' + res_history + '  str: ' + str)
     if (/\d$/.test(str)) {
       that.setData({
@@ -77,6 +106,7 @@ const params = {
         })
       }
     })
+    this.eggs() // 触发彩蛋
   },
 
   /**
@@ -228,7 +258,9 @@ const params = {
     this.setData({
       text: '',
       result: '',
-      num_tip: ''
+      num_tip: '',
+      constellation: '',
+      constellation_analysis: ''
     });
 
     // 保存到历史记录
@@ -257,7 +289,7 @@ const params = {
     let cal = event.currentTarget.dataset.cal;
     // 失效情况====================================
     // case 1. str为空 -----
-    if (str == '') return;
+    if (str == '' || /[\.:\+\-×÷]$/.test(str)) return;
     // case 2. str中无左括号
     // case 3. str中左右括号的数量一样 ------
     let [l, r] = [str.match(/\(/g), str.match(/\)/g)];
@@ -293,6 +325,7 @@ const params = {
    * description: 计算算式str并更新到屏幕结果;
    * ****************************************************************************/
   cal_promptly(str) {
+    let that = this
     // console.log(str,' len:',str.length)
     // 根据str长度调整屏幕显示的字体大小
     this.strChangeFontSize(str)
@@ -326,23 +359,49 @@ const params = {
     this.resChangeFontSize(result);
     // 对更新数据绑定
     this.setData({ result })
+
+    // ==================星座运势彩蛋======================
+    // 判断是不是输入了自己的生日19000101到20990101
+    if (/^(?:(20|19)\d.(?:(?:0[1-9]|1[0-2])(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])(?:29|30)|(?:0[13578]|1[02])31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)0229)$/g.test(str)){
+      let m = str.substring(4,6) //月份
+      let d = str.substring(6,8) //日期
+      let constellation = getConstellation(m, d) // 找到对应的星座
+      that.setData({ constellation }) // 绑定到data.constellation
+      wx.request({ // 将星座发送到api请求返回运势
+        url: 'https://api.shenjian.io/constellation/today?appid=683767112e2ee9f5a49d8d4f70a81893&constellation=' + constellation,
+        success: function(res){
+          let constellation_analysis = res.data.data.analysis
+          that.setData({ constellation_analysis })
+        },
+        fail: function(e){
+          console.log(e)
+        }
+      })
+    } else {
+      that.setData({
+        constellation:'',
+        constellation_analysis:''
+      })
+    }
   },
+  //*************************************************即时运算end */
+
   /**
    *根据str长度调整屏幕显示的字体大小
    */
   strChangeFontSize(str) {
     // 根据str长度调整屏幕显示的字体大小
-    if (str.length >= 50) {
+    if (str.length >= 36) {
       this.setData({
         screenClass: 'screen-fontsize-s',
       });
     }
-    if (str.length >= 20 && str.length < 50) {
+    if (str.length >= 14 && str.length < 36) {
       this.setData({
         screenClass: 'screen-fontsize-m',
       });
     }
-    if (str.length < 20) {
+    if (str.length < 14) {
       this.setData({
         screenClass: 'screen-fontsize-l',
       });

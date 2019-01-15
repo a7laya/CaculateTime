@@ -7,8 +7,37 @@ page {
   justify-content: flex-start;
 }
 
+view{
+  box-sizing: border-box;
+}
+
+.screen .constellation{
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  right: 20rpx;
+  top: 20rpx;
+  opacity: .8;
+  font-size: 30rpx;
+}
+.screen .constellation image{
+  width: 160rpx;
+  height: 160rpx;
+}
+
+.screen .constellation-analysis{
+  position: absolute;
+  width: 500rpx;
+  /* height: 160rpx; */
+  left: 10rpx;
+  bottom: 5rpx;
+  opacity: .8;
+  font-size: 26rpx;
+}
 .screen {
-  background: rgb(7, 128, 165);
+  background: rgb(7, 115, 148);
   padding: 10rpx;
   font-size: 80rpx;
   color: white;
@@ -16,6 +45,7 @@ page {
   width: 100%;
   word-break: break-all;
   box-sizing: border-box;
+  position: relative;
 }
 
 @keyframes changeToS_screen {
@@ -61,7 +91,7 @@ page {
 }
 
 .res {
-  background: rgb(4, 122, 143);
+  background: rgb(5, 90, 105);
   padding: 20rpx 10rpx 40rpx 10rpx;
   font-size: 74rpx;
   color: white;
@@ -129,7 +159,7 @@ page {
   color: rgb(255, 255, 255);
   background: rgb(7, 43, 54);
   width: 200rpx;
-  height: 140rpx;
+  height: 135rpx;
   justify-content: center;
   align-items: center;
   font-size: 66rpx;
@@ -160,8 +190,10 @@ page {
 }
 
 .num-item.dot {
+
   font-size: 66rpx;
   font-weight: bold;
+  padding-bottom: 20rpx;
 }
 
 .func-item:active, .num-item:active, .cal-item:active {
@@ -178,6 +210,7 @@ page {
   color: rgb(6, 243, 252);
   display: flex;
   align-items: center;
+  letter-spacing: 3rpx;
 }
 .res-intro{
   position: absolute;
@@ -206,8 +239,8 @@ page {
   position: absolute;
   font-size: 24rpx;
   bottom: 5rpx;
-  left: 5rpx;
-  color: rgb(163, 163, 163);
+  left: 50rpx;
+  color: rgb(148, 148, 148);
 }
 /* .userinfo, .uploader, .tunnel {
   margin-top: 40rpx;

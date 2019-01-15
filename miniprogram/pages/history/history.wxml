@@ -10,7 +10,7 @@
     </view>
 
     <view class='history-item' id='item{{index}}' wx:key='' wx:for='{{res_history}}'>
-      <view class='item-content' bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}" style="{{item.txtStyle}}">
+      <view class='item-content' data-index="{{index}}" style="{{item.itemStyle}}">
         <view class='order-num' bindtap='useIt' data-res_history='{{item.res}}'>引用</view>
         <view class='main'>
           <view class='res'>={{item.res}}</view>
@@ -22,7 +22,7 @@
         </view>
       </view>
       <!-- <view class='ts'>{{item.ts}}</view> -->
-        <view data-index="{{index}}" bindtap = "delItem" class="inner del">删除</view>
+        <view data-index="{{index}}" data-res='{{item.res}}' bindtap = "delItem" class="del-item">×</view>
     </view>
   </scroll-view>
 

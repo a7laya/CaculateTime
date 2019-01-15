@@ -2,6 +2,11 @@
 <view class='container'> 
   <view class='screen'>
     <view class='{{screenClass}}'>{{text}}</view>
+    <view class='constellation' wx:if='{{constellation != ""}}'>
+    <image  src='/images/{{constellation}}.png'></image>
+    <view>{{constellation}}</view>
+    </view>
+    <view class='constellation-analysis' wx:if='{{constellation_analysis != ""}}'>{{constellation_analysis}}</view>
   </view>
   <view class='res'>
     <view class='{{resClass}}'>{{result}}</view>

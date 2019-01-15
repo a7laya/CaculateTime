@@ -25,7 +25,8 @@ view{
 
 .history-item {
   width: 100%;
-  /* position: relative; */
+  justify-content: flex-end;
+  position: relative;
 }
 
 .item-content {
@@ -33,24 +34,25 @@ view{
   background-color: rgb(255, 255, 255);
   flex-direction: row;
   border-bottom: 1px solid rgb(197, 197, 197);
-  z-index: 3;
+  z-index: 2;
   transition: left 0.2s ease-in-out;
-  /* position: absolute; */
 }
 
-.inner.del {
+.del-item {
   justify-content: center;
   align-items: center;
-  background-color: #e64340;
-  width: 180rpx;
+  background-color: #bebcbc;
+  width: 60rpx;
+  height: 60rpx;
   font-size: 36rpx;
-  height: 220rpx;
   text-align: center;
-  z-index: 2;
+  z-index: 6;
   margin-left: -180rpx;
   color: #fff;
-  /* position: absolute; */
-
+  position:absolute;
+  right: 20rpx;
+  top:20rpx;
+  border-radius: 50%;
 }
 
 .history-item .main {
@@ -67,10 +69,11 @@ view{
 }
 
 .history-item .main .str {
+  display: block;
   font-size: 28rpx;
   background-color: #eee;
   padding: 10rpx;
-  width: 600rpx;
+  width: 580rpx;
   word-break: break-all;
   white-space: nowrap;
   overflow: hidden;
@@ -83,7 +86,7 @@ view{
   font-size: 28rpx;
   color: #aaa;
   padding: 10rpx;
-  width: 600rpx;
+  width: 580rpx;
 }
 
 .history-item .main .info .dots {
@@ -101,15 +104,19 @@ view{
 
 .history-item .order-num {
   justify-content: center;
+  align-items: center;
   margin: 10rpx 10rpx;
   width: 80rpx;
-  height: 140rpx;
-  line-height: 140rpx;
+  height: 180rpx;
   font-size: 12px;
   color: #fff;
   border-radius: 5rpx;
-  background-color: rgb(6, 99, 122);
+  background-color: rgb(36, 183, 219);
   margin-top: 20rpx;
+}
+
+.history-item .order-num:hover{
+  background-color: rgb(25, 118, 172);
 }
 
 .history-item .ts {
