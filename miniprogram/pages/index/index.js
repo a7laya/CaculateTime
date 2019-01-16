@@ -55,7 +55,7 @@ const params = {
     return {
       title: '最火计算器万能版',
       desc: '万能计算器',
-      path: '/page/index/index'
+      path: '/pages/index/index'
     };
   },
 
@@ -367,6 +367,7 @@ const params = {
       let d = str.substring(6,8) //日期
       let constellation = getConstellation(m, d) // 找到对应的星座
       that.setData({ constellation }) // 绑定到data.constellation
+      that.setData({ constellation_analysis: '触发彩蛋,掐指一算......' })
       wx.request({ // 将星座发送到api请求返回运势
         url: 'https://api.shenjian.io/constellation/today?appid=683767112e2ee9f5a49d8d4f70a81893&constellation=' + constellation,
         success: function(res){

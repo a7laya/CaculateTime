@@ -2,15 +2,14 @@
 <view class="container">
   <view class="page-body">
     <view class="btn-area" id="buttonContainer">
-      <button type="primary">耗油量计算器</button>
+      <!-- <button type="primary">耗油量计算器</button> -->
+      <button type="primary" bindtap='goPages' data-page='relationship'>亲戚计算器</button>
       <button type="primary" disabled="true">个税计算器</button>
       <button type="primary" disabled="true">房贷计算器</button>
-      <button type="primary" disabled="true">亲戚计算器</button>
       <button type="primary" disabled="true">五险一金计算器</button>
       <button type="primary" disabled="true">单位换算</button>
       <button type="primary" disabled="true">汇率换算</button>
       <button type="primary" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">问题反馈</button>
-      <view>以上功能会在近期不断更新完善,小伙伴们可以先"添加到我的小程序"！-2019.01.12</view>
       <!-- <button type="primary" loading="true">页面主操作 Loading</button>
 
       <button type="default">页面次要操作 Normal</button>

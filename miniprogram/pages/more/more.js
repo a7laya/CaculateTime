@@ -5,27 +5,16 @@ const more = {
    * 页面的初始数据
    */
   data: {
-    feedbackURL: './feedback'
+    feedbackURL: '../feedback/feedback'
+  },
+  goPages: function(e){
+    let page = e.currentTarget.dataset.page
+    wx.navigateTo({ url: '/pages/'+ page +'/'+ page })
   },
 
   /**
    * 跳转--问题反馈
    */
-  // gotoFeedback: function(e) {
-  //   wx.navigateTo({
-  //     url: this.data.feedbackURL
-  //   })
-  // },
-
-
-  // getUserInfo(info) {
-  //   const userInfo = info.detail.userInfo
-  //   this.setData({
-  //     userInfo,
-  //     hasUserInfo: true
-  //   })
-  //   console.log('1234:', this.data)
-  // },
   bindGetUserInfo: function(e) {
     console.log(e.detail.userInfo)
     if (e.detail.userInfo) {

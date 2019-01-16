@@ -29,25 +29,14 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 0,
 			"list": [
 				{
 					"id": -1,
-					"name": "db guide",
-					"pathName": "pages/databaseGuide/databaseGuide",
-					"query": ""
-				},
-				{
-					"id": 1,
-					"name": "模拟更新",
-					"pathName": "pages/index/index",
-					"query": ""
-				},
-				{
-					"id": -1,
-					"name": "模拟更新2",
-					"pathName": "pages/index/index",
-					"query": ""
+					"name": "关系",
+					"pathName": "pages/relationship/relationship",
+					"query": "",
+					"scene": "1008"
 				}
 			]
 		}

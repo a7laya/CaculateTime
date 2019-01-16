@@ -1,0 +1,41 @@
+<!--pages/relationship/relationship.wxml-->
+<view class='container'>
+  <view class='screen'>
+    <view class='{{screenClass}}'>{{text}}</view>
+  </view>
+  <view class='res'>
+    <view class='call'>我叫{{ta}}: </view>
+    <view class='{{resClass}}'>{{result}}</view>
+  </view>
+  <view class='res'>
+    <view class='call'>{{ta}}叫我: </view>
+    <view class='{{resClass}}'>{{result_reverse}}</view>
+  </view>
+  <view class='main'>
+    <view class='row'>
+      <view class='func-item clear' bindtap="func_all_clear" data-func='AC'>清 除</view>
+      <view class='cal-item' bindtap="input_num" data-num='的爸爸'>父</view>
+      <view class='cal-item' bindtap="input_num" data-num='的妈妈'>母</view>
+      <view class='func-item back' bindtap="func_back_space">退 格</view>
+    </view>
+
+    <view class='row'>
+      <view class='num-item' bindtap="input_num" data-num='的老公'>夫</view>
+      <view class='num-item' bindtap="input_num" data-num='的老婆'>妻</view>
+      <view class='num-item' bindtap="input_num" data-num='的哥哥'>兄</view>
+      <view class='num-item' bindtap="input_num" data-num='的弟弟'>弟</view>
+    </view>
+    <view class='row'>
+      <view class='num-item' bindtap="input_num" data-num='的儿子'>子</view>
+      <view class='num-item' bindtap="input_num" data-num='的女儿'>女</view>
+      <view class='num-item' bindtap="input_num" data-num='的姐姐'>姐</view>
+      <view class='num-item' bindtap="input_num" data-num='的妹妹'>妹</view>
+    </view>
+    <view class='row'>
+      <view class='bottom-item' bindtap="input_2dot">我的性别:</view>
+      <view class='bottom-item' bindtap="input_num" data-num='0'>男<switch/>女</view>
+      <view class='bottom-item' bindtap="input_dot">分享</view>
+      <view class='back-item'   bindtap="goPages" data-page='more'>返回</view>
+    </view>
+  </view>
+</view>

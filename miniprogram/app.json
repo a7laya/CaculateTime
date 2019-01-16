@@ -1,9 +1,10 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/relationship/relationship",
     "pages/history/history",
     "pages/more/more",
-    "pages/more/feedback"
+    "pages/feedback/feedback"
   ],
   "window": {
     "backgroundColor": "rgb(5, 55, 83)",
