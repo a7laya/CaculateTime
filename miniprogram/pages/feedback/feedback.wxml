@@ -1,2 +1,40 @@
-<!--pages/feedback/feedback.wxml-->
-<text>pages/feedback/feedback.wxml</text>
+<!--pages/more/feedback.wxml-->
+<view class="container">
+
+  <view class='page-head'>
+    <view class='page-head-title'>问题反馈</view>
+  </view>
+  <view class='page-body'>
+    <view class="page-section">
+    <image src='{{userInfo.avatarUrl}}' style='width:200rpx; height:200rpx; border-radius:200rpx;margin-bottom:10rpx;'></image>
+    <view style='font-size:16px' wx:if='{{userInfo.gender==1}}'>帅气的{{userInfo.nickName}}</view>
+    <view style='font-size:16px' wx:else>漂亮的{{userInfo.nickName}}</view>
+    </view>
+    <view class="page-section" wx:if='{{showInput}}'>
+      <!-- <view class="label">意见或建议：</view> -->
+      <view class="section feedback">
+        <form bindsubmit="insertDatabase_feedback">
+          <textarea bindinput ="feedbackInput" placeholder="请在这里输入文字" name="feedback" />
+          <button type="default" form-type="submit">提交</button>
+        </form>
+      </view>
+    </view>
+    <view class="page-section" wx:else>
+      <text>感谢您的意见和建议~</text>
+    </view>
+  </view>
+  <view class='page-foot'>
+    <view style='font-size: 14px'>关于我们</view>
+
+    <view>
+      微信号：a7laya
+    </view>
+    <view style='color:#ccc; margin-top:5px'> —— 做全网最好的计算器 ——
+    </view>
+  </view>
+  <view class='history-back'>
+    <view class='icon' bindtap='historyBack'>
+      <image src='/images/history_back_white.png'></image>
+    </view>
+  </view>
+</view>

@@ -15,11 +15,18 @@ Page({
     screenClass: '', // str屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
     resClass: '', // res屏幕样式(动态控制字体大小,也可以在wxss里面增加其他功能)
     audioSwitch: true, // 音量开关
+    sex:1
   },
   goPages: function (e) {
     let page = e.currentTarget.dataset.page
-    console.log(page)
-    wx.navigateTo({ url: '/pages/' + page + '/' + page })
+    console.log('/pages/' + page + '/' + page)
+    wx.switchTab ({ url: '/pages/' + page + '/' + page})
+  },
+  setSex(e){
+    this.setData({ sex: Number(!e.detail.value)})
+    let str = this.data.text
+    this.cal_promptly(str)
+
   },
 
   /**
@@ -33,13 +40,47 @@ Page({
   /**
    * 转发功能
    */
-  onShareAppMessage() {
+  onShareAppMessage(options) {
+    if(options.from === 'menu'){
+      console.log(options)
+    }
+    // return {
+    //   title: '亲戚关系计算器',
+    //   desc: '过年见到三姑六婆不知道叫什么,点这里可以教你',
+    //   path: '/pages/relationship/relationship'
+    // };
+    let that = this;
     return {
-      title: '亲戚关系计算器',
+      title: '亲戚关系计算器', // 转发后 所显示的title
       desc: '过年见到三姑六婆不知道叫什么,点这里可以教你',
-      path: '/pages/relationship/relationship'
-    };
-  },/*---------------------------------------------------------
+      path: '/pages/relationship/relationship', // 相对的路径
+      success: (res) => {    // 成功后要做的事情
+        console.log(res)
+        console.log(res.shareTickets[0])
+        // console.log
+
+        wx.getShareInfo({
+          shareTicket: res.shareTickets[0],
+          success: (res) => {
+            that.setData({
+              isShow: true
+            })
+            console.log(that.setData.isShow)
+          },
+          fail: function (res) { console.log(res) },
+          complete: function (res) { console.log(res) }
+        })
+      },
+      fail: function (res) {
+        // 分享失败
+        console.log(res)
+      }
+    }
+  },
+  
+  
+  
+  /*---------------------------------------------------------
   *--输出称呼到主屏幕(这里需要考虑到一下几种情况)---------------
   -----------------------------------------------------------*/
   input_num(event) {
@@ -61,8 +102,9 @@ Page({
     this.cal_promptly(str);
   },
   cal_promptly(str) {
-    let result = relationship({ text: str, sex: -1, reverse: false, type: 'default' })
-    let result_reverse = relationship({ text: str, sex: -1, reverse: true, type: 'default' })
+    let sex = this.data.sex
+    let result = relationship({ text: str, sex: sex, reverse: false, type: 'default' })
+    let result_reverse = relationship({ text: str, sex: sex, reverse: true, type: 'default' })
     // 判断对象的性别
     let ta = /(?:爸|子|弟|哥|公)$/g.test(str) ? '他' : '她'
     this.setData({ result,result_reverse,ta})

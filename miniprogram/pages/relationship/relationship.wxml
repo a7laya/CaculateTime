@@ -32,10 +32,15 @@
       <view class='num-item' bindtap="input_num" data-num='的妹妹'>妹</view>
     </view>
     <view class='row'>
-      <view class='bottom-item' bindtap="input_2dot">我的性别:</view>
-      <view class='bottom-item' bindtap="input_num" data-num='0'>男<switch/>女</view>
-      <view class='bottom-item' bindtap="input_dot">分享</view>
-      <view class='back-item'   bindtap="goPages" data-page='more'>返回</view>
+      <button class='func-item share' open-type='share'>
+      <image src='/images/share_gray.png'></image>
+      分享
+      </button>
+      <view class='func-item sex'>我的性别:男<switch  bindchange="setSex"/>女</view>
+      <view class='func-item return' bindtap='goPages' data-page='more'>
+      <image src='/images/home_gray.png'></image>
+      主菜单
+      </view>
     </view>
   </view>
 </view>
