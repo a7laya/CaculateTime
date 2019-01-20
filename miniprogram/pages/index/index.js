@@ -354,8 +354,10 @@ const params = {
     // 对str进行预处理 end==========================================
 
     // 将处理好的str传入核心计算逻辑得到数组res res[0] 是表示=或≈，res[1]表示结果
-    let res = CaculateTime.caculate_time(str);
-    let result = res[0] + res[1]
+    let [res, ifTime] = [[], false]
+    if (/:/g.test(str)) ifTime = true
+    res = CaculateTime.caculate_time(str, ifTime)
+    let result = "=" + res[1]
     this.resChangeFontSize(result);
     // 对更新数据绑定
     this.setData({ result })
@@ -469,18 +471,16 @@ let CaculateTime = {
   // 计算结果等于或者约等于，约等于是四舍五入保留两位小数的计算结果。
   equal_sign: "="
   // 错误提示信息
-  ,
-  error_string: "..."
+  , error_string: "..."
 
   /**
-   *包括括号的多个操作数计算，形如（1:20+2:20）x3.2...，先括号后乘除再加减
-   *@param     {string}  val                   可以包含括号表达式,时间必须包含小时和分钟，
-   *                                           数小数位不能超过3位，形如2，2.2，2.02
-   * 
-   *@return    {array}  [equal_sign,res]       等于或者约等于，计算结果
-   */
-  ,
-  caculate_time: function (val) {
+  *包括括号的多个操作数计算，形如（1:20+2:20）x3.2...，先括号后乘除再加减
+  *@param     {string}  val                   可以包含括号表达式,时间必须包含小时和分钟，
+  *                                           数小数位不能超过3位，形如2，2.2，2.02
+  *@param    {bool}    time                   true-计算时间，false-计算数
+  *@return    {array}  [equal_sign,res]       等于或者约等于，计算结果
+  */
+  , caculate_time: function (val, time) {
     val = val.replace(/\÷/g, '/');
     val = val.replace(/\×/g, 'x');
 
@@ -516,23 +516,29 @@ let CaculateTime = {
 
     reg = /^(-?)(\d+)([:.]?)([0-9]?[0-9]?)$/g;
     if (reg.test(val)) {
+      if (time) {
+        val = this.dot_to_col(val);
+      }
+      else {
+        val = this.col_to_dot(val);
+      }
       if (".00" == val.substring(val.length - 3, val.length)) {
         val = val.substring(0, val.length - 3)
       }
       return [this.equal_sign, val];
-    } else {
+    }
+    else {
       return [this.equal_sign, this.error_string];
     }
 
   }
 
   /**
-   *没有括号的多个操作数计算，形如1:20+2:20x3.2...
-   *@param     {string}  val     没有括号表达式
-   *@return    {string}  res     计算结果
-   */
-  ,
-  some_actor: function (val) {
+  *没有括号的多个操作数计算，形如1:20+2:20x3.2...
+  *@param     {string}  val     没有括号表达式
+  *@return    {string}  res     计算结果
+  */
+  , some_actor: function (val) {
     // 先乘除
     // 中间的操作不需要操作数前的符号，不然造成的结果可能3-3x-2 相乘后失去符号---> 36
     let reg = /(\d+)([:.]?)([0-9]?[0-9]?)([x/]-?)(\d+)([:.]?)([0-9]?[0-9]?)/;
@@ -599,16 +605,15 @@ let CaculateTime = {
   }
 
   /**
-   *没有括号的两个操作数计算，形如1:20+2:20
-   *@param     {string}  val     没有括号表达式
-   *@return    {string}  res     计算结果
-   */
-  ,
-  two_actor: function (val) {
-    let regcolcol = /^(-?)(\d+)(:)([0-5][0-9])([+-/]-?)(\d+)(:)([0-5][0-9])$/g;
+  *没有括号的两个操作数计算，形如1:20+2:20
+  *@param     {string}  val     没有括号表达式
+  *@return    {string}  res     计算结果
+  */
+  , two_actor: function (val) {
+    let regcolcol = /^(-?)(\d+)(:)([0-5][0-9])([+-x/]-?)(\d+)(:)([0-5][0-9])$/g;
     // let reg2 = /^[\s\S]*:[6-9][\s\S]*/;
-    let regcoldot = /^(-?)(\d+)(:)([0-5][0-9])([x/]-?)(\d+)([.]?)([0-9]?[0-9]?)$/g;
-    let regdotcol = /^(-?)(\d+)([.]?)([0-9]?[0-9]?)([x/]-?)(\d+)(:)([0-5][0-9])$/g;
+    let regcoldot = /^(-?)(\d+)(:)([0-5][0-9])([+-x/]-?)(\d+)([.]?)([0-9]?[0-9]?)$/g;
+    let regdotcol = /^(-?)(\d+)([.]?)([0-9]?[0-9]?)([+-x/]-?)(\d+)(:)([0-5][0-9])$/g;
     let regdotdot = /^(-?)(\d+)([.]?)([0-9]?[0-9]?)([+-x/]-?)(\d+)([.]?)([0-9]?[0-9]?)$/g;
 
     let res = this.error_string;
@@ -699,7 +704,8 @@ let CaculateTime = {
             M = (LM >= RM) ? (LM - RM) : (LM - RM + 60);
             M = (M > 9) ? M : ("0" + M);
             res = H + ":" + M;
-          } else {
+          }
+          else {
             H = (RM >= LM) ? (RH - LH) : (RH - LH - 1);
             M = (RM >= LM) ? (RM - LM) : (RM - LM + 60);
             M = (M > 9) ? M : ("0" + M);
@@ -713,8 +719,24 @@ let CaculateTime = {
 
           break;
         // 乘xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        case "x-":
+        case "x":
+        case "-,x":
+        case "-,x-":
 
-        // 除/////////////////////////////////////////////////////////////////////////////////////
+          M = (LH * 60 + LM) * (RH * 60 + RM);
+          H = Math.floor(M / 3600);
+          M = this.get_round((M % 3600) / 60, false);
+
+          M = (M > 9) ? M : ("0" + M);
+          res = H + ":" + M;
+
+          if ("x-" == sign_and_operator || "-,x" == sign_and_operator) {
+            res = '-' + res;
+          }
+          break;
+
+        // 除/////////////////////////////////////////////////////////////////////////////////
         case "/-":
         case "/":
         case "-,/":
@@ -734,12 +756,54 @@ let CaculateTime = {
           break;
       }
 
-    } else if (is_match_regcoldot) {
+    }
+    else if (is_match_regcoldot) {
       switch (sign_and_operator) {
         // 加+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        case "+":
+        case "--":
+        case "-,-":
+        case "-,+-":
+          RM = this.get_round((RM * 60) / 100, false);
+          H = LH + RH;
+          M = LM + RM;
 
+          H = H + ((M > 59) ? 1 : 0);
+          M = (M > 59) ? (M - 60) : M;
+          M = (M > 9) ? M : ("0" + M);
+
+          res = H + ":" + M;
+
+          if ("-,-" == sign_and_operator || "-,+-" == sign_and_operator) {
+            res = "-" + res;
+          }
+
+          break;
         // 减-------------------------------------------------------------------------
+        case "-":
+        case "+-":
+        case "-,+":
+        case "-,--":
+          RM = this.get_round((RM * 60) / 100, false);
+          if ((LH * 60 + LM) >= (RH * 60 + RM)) {
+            H = (LM >= RM) ? (LH - RH) : (LH - RH - 1);
+            M = (LM >= RM) ? (LM - RM) : (LM - RM + 60);
+            M = (M > 9) ? M : ("0" + M);
+            res = H + ":" + M;
+          }
+          else {
+            H = (RM >= LM) ? (RH - LH) : (RH - LH - 1);
+            M = (RM >= LM) ? (RM - LM) : (RM - LM + 60);
+            M = (M > 9) ? M : ("0" + M);
+            res = "-" + H + ":" + M;
+          }
 
+          if ("-,+" == sign_and_operator || "-,--" == sign_and_operator) {
+            // 正负反转
+            res = ("-" == res[0]) ? res.substring(1, res.length) : ("-" + res);
+          }
+
+          break;
         // 乘xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         // 时间乘于数在这里认为是时间乘于速度
         case "x-":
@@ -785,12 +849,54 @@ let CaculateTime = {
           break;
       }
 
-    } else if (is_match_regdotcol) {
+    }
+    else if (is_match_regdotcol) {
       switch (sign_and_operator) {
         // 加+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        case "+":
+        case "--":
+        case "-,-":
+        case "-,+-":
+          LM = this.get_round((LM * 60) / 100, false);
+          H = LH + RH;
+          M = LM + RM;
 
+          H = H + ((M > 59) ? 1 : 0);
+          M = (M > 59) ? (M - 60) : M;
+          M = (M > 9) ? M : ("0" + M);
+
+          res = H + ":" + M;
+
+          if ("-,-" == sign_and_operator || "-,+-" == sign_and_operator) {
+            res = "-" + res;
+          }
+
+          break;
         // 减-------------------------------------------------------------------------
+        case "-":
+        case "+-":
+        case "-,+":
+        case "-,--":
+          LM = this.get_round((LM * 60) / 100, false);
+          if ((LH * 60 + LM) >= (RH * 60 + RM)) {
+            H = (LM >= RM) ? (LH - RH) : (LH - RH - 1);
+            M = (LM >= RM) ? (LM - RM) : (LM - RM + 60);
+            M = (M > 9) ? M : ("0" + M);
+            res = H + ":" + M;
+          }
+          else {
+            H = (RM >= LM) ? (RH - LH) : (RH - LH - 1);
+            M = (RM >= LM) ? (RM - LM) : (RM - LM + 60);
+            M = (M > 9) ? M : ("0" + M);
+            res = "-" + H + ":" + M;
+          }
 
+          if ("-,+" == sign_and_operator || "-,--" == sign_and_operator) {
+            // 正负反转
+            res = ("-" == res[0]) ? res.substring(1, res.length) : ("-" + res);
+          }
+
+          break;
         // 乘xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         // 数乘于时间在这里认为是速度乘于时间
         case "x-":
@@ -833,7 +939,8 @@ let CaculateTime = {
           break;
       }
 
-    } else if (is_match_regdotdot) {
+    }
+    else if (is_match_regdotdot) {
       switch (sign_and_operator) {
         // 加+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         case "+":
@@ -866,7 +973,8 @@ let CaculateTime = {
             M = (LM >= RM) ? (LM - RM) : (LM - RM + 100);
             M = (M > 9) ? M : ("0" + M);
             res = H + "." + M;
-          } else {
+          }
+          else {
             H = (RM >= LM) ? (RH - LH) : (RH - LH - 1);
             M = (RM >= LM) ? (RM - LM) : (RM - LM + 100);
             M = (M > 9) ? M : ("0" + M);
@@ -913,7 +1021,8 @@ let CaculateTime = {
           break;
       }
 
-    } else {
+    }
+    else {
       // console.log("not match");
       res = this.error_string;
     }
@@ -921,8 +1030,7 @@ let CaculateTime = {
     return res;
   }
 
-  ,
-  get_round(M, offset) {
+  , get_round(M, offset) {
     let T = offset ? Math.round(M * 100) / 100 : Math.round(M);
 
     if (T != M) {
@@ -932,7 +1040,41 @@ let CaculateTime = {
     return T
   }
 
+  , col_to_dot(res) {
+    let prefix, H, M;
+    let reg = /^(-?)(\d+)([:])([0-5][0-9])$/g;
+    if (reg.test(res)) {
+      prefix = RegExp.$1;
+      H = RegExp.$2;
+      M = Number(RegExp.$4);
+      M = this.get_round(M * 100 / 60);
+      M = (M > 9) ? M : ("0" + M);
+      res = prefix + H + "." + M;
+    }
+    return res;
+  }
+
+  , dot_to_col(res) {
+    let prefix, H, M, SM;
+    let reg = /^(-?)(\d+)([.]?)([0-9]?[0-9]?)$/g;
+    if (reg.test(res)) {
+      prefix = RegExp.$1;
+      H = RegExp.$2;
+
+      SM = RegExp.$4;
+      M = ('' == SM) ? "00" : SM;
+      M = (1 == SM.length) ? (SM + "0") : SM;
+      M = Number(M);
+
+      M = this.get_round(M * 60 / 100);
+      M = (M > 9) ? M : ("0" + M);
+
+      res = prefix + H + ":" + M;
+    }
+    return res;
+  }
 }
+
 
 
 

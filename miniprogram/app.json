@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/relationship/relationship",
+    "pages/fuel/fuel",
     "pages/history/history",
     "pages/more/more",
     "pages/feedback/feedback"

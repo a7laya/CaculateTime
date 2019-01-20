@@ -1,0 +1,54 @@
+<!--pages/fuel/fuel.wxml-->
+<!--index.wxml-->
+<view class='container'> 
+  <view class='screen'>
+    <view class='{{screenClass}}'>{{text}}</view>
+    <view class='constellation' wx:if='{{constellation != ""}}'>
+    <image  src='/images/{{constellation}}.png'></image>
+    <view>{{constellation}}</view>
+    </view>
+    <view class='constellation-analysis' wx:if='{{constellation_analysis != ""}}'>{{constellation_analysis}}</view>
+  </view>
+  <view class='res'>
+    <view class='{{resClass}}'>{{result}}</view>
+    <view class='num-tip'>{{num_tip}}</view>
+    <view class='res-intro' bindtap="save_res_normal"><image src='../../images/star_gray.png'></image></view>
+  </view>
+  <view class='main'>
+    <view class='row'>
+      <view class='func-item clear' bindtap="func_all_clear" data-func='AC'>清 除</view>
+      <view class='cal-item' bindtap="input_left" data-cal='('>(</view>
+      <view class='cal-item' bindtap="input_right" data-cal=')'>)
+      <view class='right-intro'>(···)</view>
+      </view>
+      <view class='func-item back' bindtap="func_back_space">退 格</view>
+    </view>
+
+    <view class='row'>
+      <view class='num-item' bindtap="input_num" data-num='7'>7</view>
+      <view class='num-item' bindtap="input_num" data-num='8'>8</view>
+      <view class='num-item' bindtap="input_num" data-num='9'>9</view>
+      <view class='cal-item' bindtap="input_cal" data-cal='÷'>÷</view>
+    </view>
+    <view class='row'>
+      <view class='num-item' bindtap="input_num" data-num='4'>4</view>
+      <view class='num-item' bindtap="input_num" data-num='5'>5</view>
+      <view class='num-item' bindtap="input_num" data-num='6'>6</view>
+      <view class='cal-item' bindtap="input_cal" data-cal='×'>×</view>
+    </view>
+    <view class='row'>
+      <view class='num-item' bindtap="input_num" data-num='1'>1</view>
+      <view class='num-item' bindtap="input_num" data-num='2'>2</view>
+      <view class='num-item' bindtap="input_num" data-num='3'>3</view>
+      <view class='cal-item' bindtap="input_cal" data-cal='-'>-</view>
+    </view>
+    <view class='row'>
+      <view class='num-item dot' bindtap="input_2dot">:
+      <view class='dots-intro'>时间符</view>
+      </view>
+      <view class='num-item' bindtap="input_num" data-num='0'>0</view>
+      <view class='num-item dot' bindtap="input_dot">·</view>
+      <view class='cal-item' bindtap="input_cal" data-cal='+'>+</view>
+    </view>
+  </view>
+</view>
