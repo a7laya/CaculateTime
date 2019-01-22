@@ -15,7 +15,7 @@ const params = {
     num_tip: '', // 辅助结果显示 123456789->1亿2345万6789
     audioSwitch: true, // 音量开关
     constellation: '',
-    constellation_analysis: '试试键入出自己的生日比如:19990101'
+    constellation_analysis: '试试键入自己的生日比如:19970208'
   },
 
   /**
@@ -151,7 +151,7 @@ const params = {
   },
   /*---------------------------------------------------------
   *--输出数字到主屏幕(这里需要考虑到一下几种情况)---------------
-  * case 1. 判断不生效情况 直接return（str以.12或:12结尾 不生效 只保留两位小数） 
+  * case 1. 判断不生效情况 直接return（str以:12结尾 不生效 只保留两位小数） 
   * case 2. ":"后面输入6-9无效
   * case 3. str最后一个字符是'0'，且‘0’前面没有数字或者小数点（.:），则输入的数字直接覆盖0；（0，-0， +0）
   -----------------------------------------------------------*/
@@ -165,7 +165,7 @@ const params = {
     // 获取输入到主屏幕的字符串
     let str = this.data.text;
     // case 1.
-    if (/(\.|:)\d{2}$/.test(str)) return;
+    if (/:\d{2}$/.test(str)) return;
     // case 2.
     if (/:$/.test(str) && /[6-9]/g.test(num)) return;
     // case 3.
@@ -235,11 +235,11 @@ const params = {
     let audioSwitch = this.data.audioSwitch
     audioSwitch && this.audioPlay()
     let str = this.data.text;
-    // case 1.
-    if (!/\d*\.\d*$/g.test(str) && !/\)$/g.test(str)) {
-      // case 2. 
+    // case 1.遇到不以类似于2.12形式结尾并且不含":"的str，才加“.”
+    if (!/\d*\.\d*$/g.test(str) && !/\)$/g.test(str) && !/:/g.test(str)) {
+      // case 2. 屏幕str为空，或“.”输入之前是运算符“+-×÷”，则“.”前补0
       if (str === '' || /(\+|\-|×|÷|\()$/g.test(str)) str = str + '0';
-      // case 3.
+      // case 3. 屏幕str最后1位为":"，则“.”覆盖之
       if (/\:$/g.test(str)) str = str.substring(0, str.length - 1);
       this.setData({
         text: str + '.',
@@ -319,7 +319,7 @@ const params = {
     this.cal_promptly(str);
   },
   /* ***************************************************************************
-   * function: 立即运算
+   * function: 即时运算主体逻辑
    * author: lzb
    * date: 2019-1-7
    * description: 计算算式str并更新到屏幕结果;
@@ -329,6 +329,7 @@ const params = {
     // console.log(str,' len:',str.length)
     // 根据str长度调整屏幕显示的字体大小
     this.strChangeFontSize(str)
+    
     // 对str进行预处理 start=========================================
     // case 1.如果str不是以数字或")"结尾，则砍掉最后一个字符
     if (/[^01234567890)]$/g.test(str))
@@ -349,14 +350,16 @@ const params = {
       });
     };
     console.log(str, ' len:', str.length)
-
-
     // 对str进行预处理 end==========================================
 
     // 将处理好的str传入核心计算逻辑得到数组res res[0] 是表示=或≈，res[1]表示结果
-    let [res, ifTime] = [[], false]
-    if (/:/g.test(str)) ifTime = true
-    res = CaculateTime.caculate_time(str, ifTime)
+    // let [res, ifTime] = [[], false]
+    // if (/:/g.test(str)) ifTime = true
+    // res = CaculateTime.caculate_time(str, ifTime)
+    let res = []
+    if (/:/g.test(str)) { res = CaculateTime.caculate_time(str, true) }
+    else { res = CaculateDefault.caculate(str) }
+
     let result = "=" + res[1]
     this.resChangeFontSize(result);
     // 对更新数据绑定
@@ -1074,6 +1077,240 @@ let CaculateTime = {
     return res;
   }
 }
+
+let CaculateDefault = {
+
+  // 计算结果等于或者约等于，约等于是四舍五入保留两位小数的计算结果。
+  equal_sign: "="
+  // 错误提示信息
+  , error_string: "..."
+
+  /**
+  *包括括号的多个操作数计算，形如（1.20+2.205）x3.2...，先括号后乘除再加减
+  *@param     {string}  val                   可以包含括号表达式
+  *@return    {array}  [equal_sign,res]      等于或者约等于，计算结果
+  */
+  , caculate: function (val) {
+    val = val.replace("\÷", '/');
+    val = val.replace("\×", 'x');
+
+    let reg = /\([^(]*?\)/;
+    let index = null;
+    let l_part = null;
+    let m_part = null;
+    let r_part = null;
+    let res = this.error_string;
+    this.equal_sign = "=";
+
+
+    let is_match = val.match(reg);
+    // console.log("is_match:",is_match);
+    // 先去括号
+    while (is_match) {
+      index = is_match["index"];
+      l_part = val.substring(0, index);
+      m_part = is_match[0];
+      r_part = val.substring(index + m_part.length, val.length);
+      m_part = m_part.substring(1, m_part.length - 1);
+
+      m_part = this.some_actor(m_part);
+      if (this.error_string == m_part) {
+        return this.error_string;
+      }
+      val = l_part + m_part + r_part;
+      is_match = val.match(reg);
+    }
+
+    // 最后计算
+    val = this.some_actor(val);
+
+    reg = /^(-?)(\d+)([:.]?)(\d*)$/g;
+    return (reg.test(val)) ? [this.equal_sign, val] : [this.equal_sign, this.error_string];
+
+  }
+
+  /**
+  *没有括号的多个操作数计算，形如1:20+2:20x3.2...
+  *@param     {string}  val     没有括号表达式
+  *@return    {string}  res     计算结果
+  */
+  , some_actor: function (val) {
+    // 先乘除
+    // 中间的操作不需要操作数前的符号，不然造成的结果可能3-3x-2 相乘后失去符号---> 36
+    let reg = /(\d+)([.]?)(\d*)([x/]-?)(\d+)([.]?)(\d*)/;
+    // 需要考虑第一个数前就带有负号
+    let reg2 = /^(-)(\d+)([.]?)(\d*)([x/]-?)(\d+)([.]?)(\d*)/;
+    let index = null;
+    let l_part = null;
+    let m_part = null;
+    let r_part = null;
+    let res = this.error_string;
+
+    let is_match = val.match(reg2) ? val.match(reg2) : val.match(reg);
+
+    while (is_match) {
+      index = is_match["index"];
+      l_part = val.substring(0, index);
+      m_part = is_match[0];
+      r_part = val.substring(index + m_part.length, val.length);
+
+      m_part = this.two_actor(m_part);
+      if (this.error_string == m_part) {
+        return this.error_string;
+      }
+
+      val = l_part + m_part + r_part;
+      val = val.replace("---", "-");
+      val = val.replace("+--", "+");
+
+      is_match = val.match(reg2) ? val.match(reg2) : val.match(reg);
+    }
+    let is_match1 = is_match;
+
+    // 后加减
+    reg = /(\d+)([.]?)(\d*)([+-]-?)(\d+)([.]?)(\d*)/;
+    reg2 = /^(-)(\d+)([.]?)(\d*)([+-]-?)(\d+)([.]?)(\d*)/;
+    index = null;
+    l_part = null;
+    m_part = null;
+    r_part = null;
+    is_match = null;
+
+    is_match = val.match(reg2) ? val.match(reg2) : val.match(reg);
+    while (is_match) {
+
+      index = is_match["index"];
+      l_part = val.substring(0, index);
+      m_part = is_match[0];
+      r_part = val.substring(index + m_part.length, val.length);
+      m_part = this.two_actor(m_part);
+      if (this.error_string == m_part) {
+        return this.error_string;
+      }
+      val = l_part + m_part + r_part;
+      val = val.replace("---", "-");
+      val = val.replace("+--", "+");
+
+      is_match = val.match(reg2) ? val.match(reg2) : val.match(reg);
+    }
+
+
+    reg = /^(-?)(\d+)([.]?)(\d*)$/g;
+
+    return (reg.test(val)) ? val : this.error_string;
+  }
+
+  /**
+  *没有括号的两个操作数计算，形如1:20+2:20
+  *@param     {string}  val     没有括号表达式
+  *@return    {string}  res     计算结果
+  */
+  , two_actor: function (val) {
+    let regdotdot = /^(-?)(\d+)([.]?)(\d*)([+-x/]-?)(\d+)([.]?)(\d*)$/g;
+
+    let res = this.error_string;
+    // ..
+    let is_match_regdotdot = regdotdot.test(val);
+
+    let prefix;
+    let operator;
+    let LH;
+    let RH;
+    let SLM;
+    let LM;
+    let SRM;
+    let RM;
+    let H;
+    let M;
+
+    let sign_and_operator;
+
+    if (is_match_regdotdot) {
+      prefix = RegExp.$1;
+      operator = RegExp.$5;
+
+      LH = RegExp.$2;
+      RH = RegExp.$6;
+
+      SLM = RegExp.$4;
+      LM = Number("0." + SLM);
+
+      SRM = RegExp.$8;
+      RM = Number("0." + SRM);
+
+      H = 0;
+      M = 0;
+
+      sign_and_operator = ('' == prefix) ? operator : (prefix + "," + operator);
+    }
+
+
+    switch (sign_and_operator) {
+      // 加+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      case "+":
+      case "--":
+      case "-,-":
+      case "-,+-":
+
+        res = (Number(LH + "." + SLM) * 1000000 + Number(RH + "." + SRM) * 1000000) / 1000000
+
+        if (("-,-" == sign_and_operator || "-,+-" == sign_and_operator) && "false" != res) {
+          res = "-" + res;
+        }
+
+        break;
+      // 减-------------------------------------------------------------------------
+      case "-":
+      case "+-":
+      case "-,+":
+      case "-,--":
+
+        res = (Number(LH + "." + SLM) * 1000000 - Number(RH + "." + SRM) * 1000000) / 1000000
+
+        if (("-,+" == sign_and_operator || "-,--" == sign_and_operator) && "false" != res) {
+          // 正负反转
+          res = (0 > res) ? Math.abs(res) : ("-" + res);
+        }
+
+        break;
+      // 乘xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      case "x-":
+      case "x":
+      case "-,x":
+      case "-,x-":
+
+        res = ((Number(LH + "." + SLM) * 1000) * (Number(RH + "." + SRM) * 1000)) / 1000000;
+
+        if (("x-" == sign_and_operator || "-,x" == sign_and_operator) && this.error_string != res) {
+          res = '-' + res;
+        }
+        break;
+      // 除/////////////////////////////////////////////////////////////////////////////////////
+      case "/-":
+      case "/":
+      case "-,/":
+      case "-,/-":
+
+        res = (Number(LH + "." + SLM) * 1000000) / (Number(RH + "." + SRM) * 1000000);
+
+        if ("/-" == sign_and_operator || "-,/" == sign_and_operator) {
+          res = '-' + res;
+        }
+        break;
+
+
+      default:
+        res = this.error_string;
+        break;
+    }
+
+
+    return res;
+  }
+
+
+}
+
 
 
 

@@ -17,6 +17,52 @@ const params = {
     constellation: '',
     constellation_analysis: '该界面专门计算油量'
   },
+  goPages: function (e) {
+    let page = e.currentTarget.dataset.page
+    console.log('/pages/' + page + '/' + page)
+    wx.switchTab({ url: '/pages/' + page + '/' + page })
+  },
+
+  /**
+   * 转发功能
+   */
+  onShareAppMessage(options) {
+    if (options.from === 'menu') {
+      console.log(options)
+    }
+    // return {
+    //   title: '亲戚关系计算器',
+    //   desc: '过年见到三姑六婆不知道叫什么,点这里可以教你',
+    //   path: '/pages/relationship/relationship'
+    // };
+    let that = this;
+    return {
+      title: '亲戚关系计算器', // 转发后 所显示的title
+      desc: '过年见到三姑六婆不知道叫什么,点这里可以教你',
+      path: '/pages/relationship/relationship', // 相对的路径
+      success: (res) => {    // 成功后要做的事情
+        console.log(res)
+        console.log(res.shareTickets[0])
+        // console.log
+
+        wx.getShareInfo({
+          shareTicket: res.shareTickets[0],
+          success: (res) => {
+            that.setData({
+              isShow: true
+            })
+            console.log(that.setData.isShow)
+          },
+          fail: function (res) { console.log(res) },
+          complete: function (res) { console.log(res) }
+        })
+      },
+      fail: function (res) {
+        // 分享失败
+        console.log(res)
+      }
+    }
+  },
 
   /**
    * 设置彩蛋 - 主屏幕

@@ -20,8 +20,10 @@
     </view>
 
     <view class='row'>
-      <view class='num-item' bindtap="input_num" data-num='的老公'>夫</view>
-      <view class='num-item' bindtap="input_num" data-num='的老婆'>妻</view>
+      <view class='num-item' bindtap="input_num" data-num='的老公' wx:if='{{!sex_forbid}}'>夫</view>
+      <view class='num-item forbid' wx:if='{{sex_forbid}}' >夫</view>
+      <view class='num-item' bindtap="input_num" data-num='的老婆' wx:if='{{sex_forbid}}'>妻</view>
+      <view class='num-item forbid' wx:if='{{!sex_forbid}}'>妻</view>
       <view class='num-item' bindtap="input_num" data-num='的哥哥'>兄</view>
       <view class='num-item' bindtap="input_num" data-num='的弟弟'>弟</view>
     </view>

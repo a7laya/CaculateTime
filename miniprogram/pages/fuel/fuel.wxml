@@ -50,5 +50,17 @@
       <view class='num-item dot' bindtap="input_dot">·</view>
       <view class='cal-item' bindtap="input_cal" data-cal='+'>+</view>
     </view>
+    
+    <view class='row'>
+      <button class='func-item share' open-type='share'>
+      <image src='/images/share_gray.png'></image>
+      分享
+      </button>
+      <view class='func-item sex'></view>
+      <view class='func-item return' bindtap='goPages' data-page='more'>
+      <image src='/images/home_gray.png'></image>
+      主菜单
+      </view>
+    </view>
   </view>
 </view>
