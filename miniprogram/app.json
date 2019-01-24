@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/junzhuan/junzhuan",
     "pages/relationship/relationship",
     "pages/fuel/fuel",
     "pages/history/history",

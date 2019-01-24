@@ -1,0 +1,78 @@
+<!--pages/junzhuan/junzhuan.wxml-->
+<!-- <view class="container"> -->
+<view class="page-body">
+  <view class="page-section">
+    <view class="weui-cells__title">服役年限计分:{{yearPoints}}</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" maxlength="2" type="number" bindinput="bindKeyInput" placeholder="这是一个数字输入框" />
+      </view>
+    </view>
+  </view>
+  <view class="page-section">
+    <view class="weui-cells__title">职务等级计分:{{rankPoints}}</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">当前选择</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker bindchange="rankChange" value="{{index}}" range="{{arrRank}}">
+            <view class="weui-input">{{arrRank[arrRankIndex]}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- <view class="page-section">
+      <view class="weui-cells__title">控制最大输入长度的input</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input class="weui-input" maxlength="10" placeholder="最大输入长度为10" />
+        </view>
+      </view>
+    </view> -->
+  <view class="page-section">
+    <view class="weui-cells__title">实时获取输入值：{{inputValue}}</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" maxlength="10" bindinput="bindKeyInput" placeholder="输入同步到view中" />
+      </view>
+    </view>
+  </view>
+  <!-- <view class="page-section">
+      <view class="weui-cells__title">控制键盘的input</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input class="weui-input"  bindinput="bindHideKeyboard" placeholder="输入123自动收起键盘" />
+        </view>
+      </view>
+    </view> -->
+  <!-- <view class="page-section">
+      <view class="weui-cells__title">带小数点的input</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input class="weui-input" type="digit" placeholder="带小数点的数字键盘"/>
+        </view>
+      </view>
+    </view> -->
+  <!-- <view class="page-section">
+      <view class="weui-cells__title">身份证输入的input</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input class="weui-input" type="idcard" placeholder="身份证输入键盘" />
+        </view>
+      </view>
+    </view> -->
+  <!-- <view class="page-section">
+      <view class="weui-cells__title">控制占位符颜色的input</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input class="weui-input" placeholder-style="color:#F76260" placeholder="占位符字体是红色的" />
+        </view>
+      </view>
+    </view> -->
+</view>
+<!-- </view> -->
+<view>服役年限计分{{yearPoints}}</view>
+<view>总分{{totalPoints}}</view>

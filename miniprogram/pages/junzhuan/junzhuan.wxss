@@ -1,0 +1,10 @@
+/* pages/junzhuan/junzhuan.wxss */
+@import "../common/lib/weui.wxss";
+.picker{
+  padding: 19rpx 26rpx;
+  background-color: #FFFFFF;
+}
+
+.page-section{
+  margin-bottom: 20rpx;
+}

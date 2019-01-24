@@ -3,6 +3,7 @@
   <view class="page-body">
     <view class="btn-area" id="buttonContainer">
       <button type="primary" bindtap='goPages' data-page='fuel'>耗油量计算器</button>
+      <button type="primary" bindtap='goPages' data-page='junzhuan'>军转积分器</button>
       <button type="primary" bindtap='goPages' data-page='relationship'>亲戚计算器</button>
       <button type="primary" disabled="true">个税计算器</button>
       <button type="primary" disabled="true">房贷计算器</button>
