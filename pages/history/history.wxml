@@ -1,0 +1,29 @@
+<!--pages/history/history.wxml-->
+<!-- 在..处增加功能:全屏结果  添加备注 -->
+<view class='container'>
+  <button type="warn" wx:if='{{has_data}}' bindtap='clear_history' data-model='normal' style='width:100%'>清空这些记录</button>
+  <scroll-view scroll-y class='history-list'>
+    <view wx:if='{{!has_data}}' class='no-data'>
+      <text>暂时没有历史记录,</text>
+      <text>请点击结果栏"☆"保存数据!</text>
+
+    </view>
+
+    <view class='history-item' id='item{{index}}' wx:key='' wx:for='{{res_history}}'>
+      <view class='item-content' data-index="{{index}}" style="{{item.itemStyle}}">
+        <view class='order-num' bindtap='useIt' data-res_history='{{item.res}}'>引用</view>
+        <view class='main'>
+          <view class='res'>={{item.res}}</view>
+          <view class='str'>{{item.str}}={{item.res}}</view>
+          <view class='info'>
+            <view class='time'>{{item.time_pass}}</view>
+            <view class='dots' bindtap='show_options'>··</view>
+          </view>
+        </view>
+      </view>
+      <!-- <view class='ts'>{{item.ts}}</view> -->
+        <view data-index="{{index}}" data-res='{{item.res}}' bindtap = "delItem" class="del-item">×</view>
+    </view>
+  </scroll-view>
+
+</view>

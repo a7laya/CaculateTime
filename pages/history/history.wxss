@@ -1,0 +1,138 @@
+/* pages/history/history.wxss */
+view{
+  box-sizing: border-box;
+  display: flex;
+}
+.container {
+  background-color: rgb(255, 255, 255);
+}
+
+.history-list {
+  height: 1200rpx;
+  width: 100%;
+  overflow: scroll;
+}
+
+.history-list .no-data {
+  height: 800rpx;
+  padding: 40rpx;
+  font-size: 36rpx;
+  color: #aaa;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.history-item {
+  width: 100%;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.item-content {
+  width: 750rpx;
+  background-color: rgb(255, 255, 255);
+  flex-direction: row;
+  border-bottom: 1px solid rgb(197, 197, 197);
+  z-index: 2;
+  transition: left 0.2s ease-in-out;
+}
+
+.del-item {
+  justify-content: center;
+  align-items: center;
+  background-color: #bebcbc;
+  width: 60rpx;
+  height: 60rpx;
+  font-size: 36rpx;
+  text-align: center;
+  z-index: 6;
+  margin-left: -180rpx;
+  color: #fff;
+  position:absolute;
+  right: 20rpx;
+  top:20rpx;
+  border-radius: 50%;
+}
+
+.history-item .main {
+  box-sizing: border-box;
+  flex-direction: column;
+  width: 600rpx;
+  padding: 0 10rpx;
+  margin-top: 20rpx;
+}
+
+.history-item .main .res {
+  font-size: 50rpx;
+  color: rgb(10, 168, 207);
+}
+
+.history-item .main .str {
+  display: block;
+  font-size: 28rpx;
+  background-color: #eee;
+  padding: 10rpx;
+  width: 580rpx;
+  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-item .main .info {
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 28rpx;
+  color: #aaa;
+  padding: 10rpx;
+  width: 580rpx;
+}
+
+.history-item .main .info .dots {
+  background-color: #eee;
+  width: 66rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  font-size: 30rpx;
+  font-weight: 900;
+  letter-spacing: 5rpx;
+  justify-content: center;
+  color: #333;
+  border-radius: 10rpx;
+}
+
+.history-item .order-num {
+  justify-content: center;
+  align-items: center;
+  margin: 10rpx 10rpx;
+  width: 80rpx;
+  height: 180rpx;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 5rpx;
+  background-color: rgb(36, 183, 219);
+  margin-top: 20rpx;
+}
+
+.history-item .order-num:hover{
+  background-color: rgb(25, 118, 172);
+}
+
+.history-item .ts {
+  position: absolute;
+  text-align: center;
+  right: 0;
+  top: 0;
+  font-size: 12px;
+  padding: 2px 8px;
+  /* width: 360rpx; */
+  border-radius: 0 0 0 10rpx;
+  background-color: rgb(19, 83, 112);
+  color: rgb(92, 217, 255);
+  opacity: 0.8;
+}
+
+button {
+  padding-bottom: 10rpx;
+}

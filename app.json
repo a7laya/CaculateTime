@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/junzhuan/junzhuan",
+    "pages/relationship/relationship",
+    "pages/fuel/fuel",
+    "pages/history/history",
+    "pages/more/more",
+    "pages/feedback/feedback"
+  ],
+  "window": {
+    "backgroundColor": "#053753",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#000000",
+    "navigationBarTitleText": "时分计算器",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/more/more",
+        "iconPath": "images/more_gray.png",
+        "selectedIconPath": "images/more_blue.png",
+        "text": "更多功能"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/home_gray.png",
+        "selectedIconPath": "images/home_blue.png",
+        "text": "主页"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "iconPath": "images/history_gray.png",
+        "selectedIconPath": "images/history_blue.png",
+        "text": "历史"
+      }
+    ]
+  },
+  "cloud": true
+}
